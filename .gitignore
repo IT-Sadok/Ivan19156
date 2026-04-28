@@ -1,0 +1,34 @@
+# Build
+bin/
+obj/
+/packages/
+
+# Rider
+.idea/
+riderModule.iml
+/_ReSharper.Caches/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# .NET
+*.nupkg
+*.snupkg
+
+# User Secrets (важливо — секрети не в git)
+**/secrets.json
+**/appsettings.Development.json
+**/appsettings.Production.json
+
+# Logs
+logs/
+*.log
+
+# Docker
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
