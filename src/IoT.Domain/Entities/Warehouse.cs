@@ -1,0 +1,14 @@
+// IoT.Domain/Entities/Warehouse.cs
+using IoT.Domain.Abstractions;
+
+namespace IoT.Domain.Entities;
+
+public class Warehouse : AggregateRoot
+{
+    public string Name { get; set; } = string.Empty;
+    public string? Address { get; set; }
+    public decimal? Latitude { get; set; }
+    public decimal? Longitude { get; set; }
+
+    public ICollection<DeviceLocation> DeviceLocations { get; set; } = new List<DeviceLocation>();
+}

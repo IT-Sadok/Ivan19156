@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IoT.Rest.Controllers;
 
-[ApiController]
 [Route("api/auth")]
-public class AuthController : ControllerBase
+public class AuthController : BaseController
 {
     private readonly IMediator _mediator;
 
@@ -16,19 +15,9 @@ public class AuthController : ControllerBase
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result.IsSuccess
-            ? Ok(result.Value)
-            : StatusCode(result.StatusCode, result.Error);
-    }
+        => HandleResult(await _mediator.Send(command));
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result.IsSuccess
-            ? Ok(result.Value)
-            : StatusCode(result.StatusCode, result.Error);
-    }
+        => HandleResult(await _mediator.Send(command));
 }

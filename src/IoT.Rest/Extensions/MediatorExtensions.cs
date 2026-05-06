@@ -1,5 +1,6 @@
 // IoT.Api/Extensions/MediatorExtensions.cs
 using System.Reflection;
+using FluentValidation;
 using IoT.Application.Common.Mediator;
 using IoT.Interfaces.Mediator;
 using IoT.Application.Common.Behaviors;
@@ -38,7 +39,9 @@ public static class MediatorExtensions
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
-
+ 
+        services.AddValidatorsFromAssembly(applicationAssembly); 
+        
         return services;
     }
 }
