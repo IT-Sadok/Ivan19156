@@ -11,6 +11,9 @@ public class UnitOfWork : IUnitOfWork
     private readonly AppDbContext _context;
     private IDbContextTransaction? _transaction;
     private IDeviceRepository? _devices;
+    private IDeviceCommandRepository? _deviceCommands;
+    private ICommandTypeRepository? _commandTypes;
+    private ITelemetryRepository? _telemetry;
     private bool _disposed;
 
     public UnitOfWork(AppDbContext context)
@@ -19,6 +22,13 @@ public class UnitOfWork : IUnitOfWork
     public IDeviceRepository Devices
         => _devices ??= new DeviceRepository(_context);
 
+    public IDeviceCommandRepository DeviceCommands
+        => _deviceCommands ??= new DeviceCommandRepository(_context);
+    public ICommandTypeRepository CommandTypes
+        => _commandTypes ??= new CommandTypeRepository(_context);
+    public ITelemetryRepository Telemetry
+        => _telemetry ??= new TelemetryRepository(_context);
+    
     public async Task<int> SaveChangesAsync(CancellationToken ct = default)
         => await _context.SaveChangesAsync(ct);
 

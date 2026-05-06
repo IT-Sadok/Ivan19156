@@ -1,4 +1,5 @@
 using IoT.Domain.Entities;
+using IoT.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,9 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<DeviceLocation> DeviceLocations { get; set; }
     public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+    public DbSet<DeviceCommand> DeviceCommands { get; set; }
+    public DbSet<CommandType> CommandTypes { get; set; }
+    public DbSet<TelemetryRecord> TelemetryRecords { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -48,5 +52,40 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         builder.Entity<Device>()
             .Property(d => d.UpdatedAt)
             .HasDefaultValueSql("now()");
+        
+        builder.Entity<DeviceCommand>()
+            .Property(c => c.CreatedAt)
+            .HasDefaultValueSql("now()");
+
+        builder.Entity<DeviceCommand>()
+            .Property(c => c.UpdatedAt)
+            .HasDefaultValueSql("now()");
+
+        builder.Entity<CommandType>()
+            .HasIndex(ct => ct.Slug)
+            .IsUnique();
+        
+        builder.Entity<TelemetryRecord>()
+            .HasIndex(t => new { t.DeviceId, t.MessageId })
+            .IsUnique();
+
+        builder.Entity<TelemetryRecord>()
+            .Property(t => t.ReceivedAt)
+            .HasDefaultValueSql("now()");
+
+        var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        builder.Entity<CommandType>().HasData(
+            new CommandType { Id = Guid.Parse("a1b2c3d4-0001-0000-0000-000000000000"), Slug = "turn_on",          Description = "Turn on the device",       CreatedAt = seedDate, UpdatedAt = seedDate },
+            new CommandType { Id = Guid.Parse("a1b2c3d4-0002-0000-0000-000000000000"), Slug = "turn_off",         Description = "Turn off the device",      CreatedAt = seedDate, UpdatedAt = seedDate },
+            new CommandType { Id = Guid.Parse("a1b2c3d4-0003-0000-0000-000000000000"), Slug = "reboot",           Description = "Reboot the device",        CreatedAt = seedDate, UpdatedAt = seedDate },
+            new CommandType { Id = Guid.Parse("a1b2c3d4-0004-0000-0000-000000000000"), Slug = "set_temperature",  Description = "Set target temperature",   CreatedAt = seedDate, UpdatedAt = seedDate },
+            new CommandType { Id = Guid.Parse("a1b2c3d4-0005-0000-0000-000000000000"), Slug = "update_firmware",  Description = "Update device firmware",   CreatedAt = seedDate, UpdatedAt = seedDate }
+        );
+
+        builder.Entity<SensorDevice>().HasData(
+            new SensorDevice { Id = Guid.Parse("b1c2d3e4-0001-0000-0000-000000000000"), Name = "Test Temperature Sensor", Type = DeviceType.Sensor, AdminStatus = DeviceAdminStatus.Active, SensorType = SensorType.Temperature, MeasurementUnit = "°C", CreatedAt = seedDate, UpdatedAt = seedDate },
+            new SensorDevice { Id = Guid.Parse("b1c2d3e4-0002-0000-0000-000000000000"), Name = "Test Humidity Sensor",    Type = DeviceType.Sensor, AdminStatus = DeviceAdminStatus.Active, SensorType = SensorType.Humidity,    MeasurementUnit = "%",  CreatedAt = seedDate, UpdatedAt = seedDate }
+        );
     }
 }

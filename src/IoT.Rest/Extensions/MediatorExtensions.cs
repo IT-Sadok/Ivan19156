@@ -4,6 +4,7 @@ using FluentValidation;
 using IoT.Application.Common.Mediator;
 using IoT.Interfaces.Mediator;
 using IoT.Application.Common.Behaviors;
+using IoT.Contracts.Devices;
 
 namespace IoT.Rest.Extensions;
 
@@ -40,8 +41,9 @@ public static class MediatorExtensions
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
  
-        services.AddValidatorsFromAssembly(applicationAssembly); 
-        
+        services.AddValidatorsFromAssembly(applicationAssembly);
+        services.AddValidatorsFromAssembly(typeof(DeviceDto).Assembly);
+
         return services;
     }
 }

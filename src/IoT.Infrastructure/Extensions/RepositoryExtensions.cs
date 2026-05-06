@@ -14,6 +14,9 @@ public static class RepositoryExtensions
     {
         services.AddScoped<IDeviceRepository, DeviceRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IDeviceCommandRepository, DeviceCommandRepository>();
+        services.AddScoped<ICommandTypeRepository, CommandTypeRepository>();
+        services.AddScoped<ITelemetryRepository, TelemetryRepository>();
         return services;
     }
 }
