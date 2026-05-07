@@ -8,8 +8,8 @@ public class DeviceCommand : AggregateRoot
     public Guid DeviceId { get; set; }
     public Device Device { get; set; } = null!;
 
-    public Guid IssuedById { get; set; }
-    public User IssuedBy { get; set; } = null!;
+    public Guid? IssuedById { get; set; }
+    public User? IssuedBy { get; set; }
 
     public Guid CommandTypeId { get; set; }
     public CommandType CommandType { get; set; } = null!;

@@ -9,11 +9,17 @@ public class DeviceCommandMappingProfile : Profile
 {
     public DeviceCommandMappingProfile()
     {
-        CreateMap<DeviceCommand, DeviceCommandDto>()
-            .ForMember(d => d.CommandTypeSlug,
-                o => o.MapFrom(s => s.CommandType.Slug));
-
         CreateMap<CreateDeviceCommandRequest, CreateDeviceCommandCommand>()
-            .ForCtorParam("deviceId", o => o.MapFrom(_ => Guid.Empty));
+            .ConstructUsing(src => new CreateDeviceCommandCommand(
+                Guid.Empty,
+                src.CommandTypeSlug,
+                src.Parameters,
+                src.Priority,
+                src.ExpiresAt));
+
+        CreateMap<DeviceCommand, DeviceCommandDto>()
+            .ForMember(dest => dest.CommandTypeSlug,
+                opt => opt.MapFrom(src => src.CommandType.Slug));
     }
 }
+

@@ -2,6 +2,7 @@ using AutoMapper;
 using IoT.Contracts.DeviceCommands;
 using IoT.Interfaces;
 using IoT.Interfaces.Mediator;
+using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 
 namespace IoT.Application.Queries.DeviceCommands.GetDeviceCommands;
@@ -11,21 +12,32 @@ public class GetDeviceCommandsQueryHandler
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ICacheService _cache;
 
-    public GetDeviceCommandsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public GetDeviceCommandsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cache)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _cache = cache;
     }
 
     public async Task<Result<IEnumerable<DeviceCommandDto>>> Handle(
         GetDeviceCommandsQuery request,
         CancellationToken ct = default)
     {
+        var cacheKey = $"device:commands:{request.DeviceId}";
+
+        var cached = await _cache.GetAsync<IEnumerable<DeviceCommandDto>>(cacheKey);
+        if (cached != null)
+            return Result<IEnumerable<DeviceCommandDto>>.Success(cached);
+
         var commands = await _unitOfWork.DeviceCommands
             .GetByDeviceIdAsync(request.DeviceId);
 
-        return Result<IEnumerable<DeviceCommandDto>>.Success(
-            _mapper.Map<IEnumerable<DeviceCommandDto>>(commands));
+        var dtos = _mapper.Map<IEnumerable<DeviceCommandDto>>(commands);
+
+        await _cache.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(2));
+
+        return Result<IEnumerable<DeviceCommandDto>>.Success(dtos);
     }
 }

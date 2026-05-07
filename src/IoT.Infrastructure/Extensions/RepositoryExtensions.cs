@@ -1,8 +1,10 @@
 // IoT.Infrastructure/Extensions/RepositoryExtensions.cs
 using IoT.Infrastructure.Persistence;
 using IoT.Infrastructure.Repositories;
+using IoT.Infrastructure.Services;
 using IoT.Interfaces;
 using IoT.Interfaces.Repositories;
+using IoT.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IoT.Infrastructure.Extensions;
@@ -17,6 +19,8 @@ public static class RepositoryExtensions
         services.AddScoped<IDeviceCommandRepository, DeviceCommandRepository>();
         services.AddScoped<ICommandTypeRepository, CommandTypeRepository>();
         services.AddScoped<ITelemetryRepository, TelemetryRepository>();
+        
+        services.AddScoped<ICacheService, CacheService>();
         return services;
     }
 }

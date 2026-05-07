@@ -1,3 +1,4 @@
+using IoT.Domain.Abstractions;
 using IoT.Domain.Entities;
 using IoT.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -87,5 +88,26 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             new SensorDevice { Id = Guid.Parse("b1c2d3e4-0001-0000-0000-000000000000"), Name = "Test Temperature Sensor", Type = DeviceType.Sensor, AdminStatus = DeviceAdminStatus.Active, SensorType = SensorType.Temperature, MeasurementUnit = "°C", CreatedAt = seedDate, UpdatedAt = seedDate },
             new SensorDevice { Id = Guid.Parse("b1c2d3e4-0002-0000-0000-000000000000"), Name = "Test Humidity Sensor",    Type = DeviceType.Sensor, AdminStatus = DeviceAdminStatus.Active, SensorType = SensorType.Humidity,    MeasurementUnit = "%",  CreatedAt = seedDate, UpdatedAt = seedDate }
         );
+    }
+    
+    public override async Task<int> SaveChangesAsync(CancellationToken ct = default)
+    {
+        var entries = ChangeTracker.Entries<BaseEntity>();
+
+        foreach (var entry in entries)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    break;
+            }
+        }
+
+        return await base.SaveChangesAsync(ct);
     }
 }

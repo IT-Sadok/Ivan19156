@@ -29,6 +29,8 @@ public static class InfrastructureServiceExtensions
             });
         });
         services.AddRepositories();
+        services.AddStackExchangeRedisCache(options =>
+            options.Configuration = config.GetConnectionString("Redis"));
         services.AddScoped<ICommandNotificationService, CommandNotificationService>();
 
         return services;
