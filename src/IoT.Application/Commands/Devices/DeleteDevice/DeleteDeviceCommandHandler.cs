@@ -16,7 +16,7 @@ public class DeleteDeviceCommandHandler
         DeleteDeviceCommand request,
         CancellationToken ct = default)
     {
-        var device = await _unitOfWork.Devices.GetByIdAsync(request.Id);
+        var device = await _unitOfWork.Devices.GetByIdAsync(request.Id, ct);
 
         if (device == null)
             return Result<bool>.NotFound($"Device {request.Id} not found");

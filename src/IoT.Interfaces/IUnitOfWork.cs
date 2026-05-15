@@ -1,5 +1,5 @@
-// IoT.Interfaces/IUnitOfWork.cs
 using IoT.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace IoT.Interfaces;
 
@@ -9,9 +9,7 @@ public interface IUnitOfWork : IDisposable
     IDeviceCommandRepository DeviceCommands { get; }
     ICommandTypeRepository CommandTypes { get; }
     ITelemetryRepository Telemetry { get; }
-    
+
     Task<int> SaveChangesAsync(CancellationToken ct = default);
-    Task BeginTransactionAsync();
-    Task CommitAsync();
-    Task RollbackAsync();
+    Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct = default);
 }

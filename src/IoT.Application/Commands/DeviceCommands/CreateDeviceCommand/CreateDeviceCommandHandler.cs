@@ -9,7 +9,7 @@ using IoT.Shared.Common;
 namespace IoT.Application.Commands.DeviceCommands.CreateDeviceCommand;
 
 public class CreateDeviceCommandHandler
-    : IRequestHandler<CreateDeviceCommandCommand, Result<DeviceCommandDto>>
+    : IRequestHandler<CreateDeviceCommandCommand, Result<DeviceCommandResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -20,18 +20,19 @@ public class CreateDeviceCommandHandler
         _mapper = mapper;
     }
 
-    public async Task<Result<DeviceCommandDto>> Handle(
+    public async Task<Result<DeviceCommandResponse>> Handle(
         CreateDeviceCommandCommand request,
         CancellationToken ct = default)
     {
-        var device = await _unitOfWork.Devices.GetByIdAsync(request.DeviceId);
+        var device = await _unitOfWork.Devices.GetByIdAsync(request.DeviceId, ct);
         if (device == null)
-            return Result<DeviceCommandDto>.NotFound($"Device {request.DeviceId} not found");
+            return Result<DeviceCommandResponse>.NotFound($"Device {request.DeviceId} not found");
 
+        var slug = request.CommandTypeSlug.ToSlug();
         var commandType = await _unitOfWork.CommandTypes
-            .FirstOrDefaultAsync(ct2 => ct2.Slug == request.CommandTypeSlug);
+            .FirstOrDefaultAsync(ct2 => ct2.Slug == slug, ct: ct);
         if (commandType == null)
-            return Result<DeviceCommandDto>.NotFound($"CommandType {request.CommandTypeSlug} not found");
+            return Result<DeviceCommandResponse>.NotFound($"CommandType '{slug}' not found");
 
         var command = new DeviceCommand
         {
@@ -45,9 +46,9 @@ public class CreateDeviceCommandHandler
             ExpiresAt = request.ExpiresAt
         };
 
-        await _unitOfWork.DeviceCommands.AddAsync(command);
+        await _unitOfWork.DeviceCommands.AddAsync(command, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return Result<DeviceCommandDto>.Success(_mapper.Map<DeviceCommandDto>(command));
+        return Result<DeviceCommandResponse>.Success(_mapper.Map<DeviceCommandResponse>(command));
     }
 }

@@ -1,4 +1,3 @@
-// IoT.Infrastructure/Repositories/BaseRepository.cs
 using System.Linq.Expressions;
 using IoT.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +15,13 @@ public class BaseRepository<T> : IRepository<T> where T : class
         _dbSet = context.Set<T>();
     }
 
-    public async Task<T?> GetByIdAsync(Guid id)
-        => await _dbSet.FindAsync(id);
+    public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken ct = default)
+        => await _dbSet.FindAsync(new object[] { id }, ct);
 
-    public async Task<IEnumerable<T>> GetAllAsync()
-        => await _dbSet.ToListAsync();
+    public virtual async Task<IEnumerable<T>> GetAllAsync(CancellationToken ct = default)
+        => await _dbSet.ToListAsync(ct);
 
-    public IQueryable<T> Filter(
+    public virtual IQueryable<T> Filter(
         Expression<Func<T, bool>>? predicate = null,
         bool noTracking = false)
     {
@@ -36,56 +35,58 @@ public class BaseRepository<T> : IRepository<T> where T : class
         return query;
     }
 
-    public async Task<T?> FirstOrDefaultAsync(
+    public virtual async Task<T?> FirstOrDefaultAsync(
         Expression<Func<T, bool>> predicate,
-        bool noTracking = false)
+        bool noTracking = false,
+        CancellationToken ct = default)
     {
         IQueryable<T> query = noTracking
             ? _dbSet.AsNoTracking()
             : _dbSet;
 
-        return await query.FirstOrDefaultAsync(predicate);
+        return await query.FirstOrDefaultAsync(predicate, ct);
     }
 
-    public async Task<T?> LastOrDefaultAsync(
+    public virtual async Task<T?> LastOrDefaultAsync(
         Expression<Func<T, bool>> predicate,
-        bool noTracking = false)
+        bool noTracking = false,
+        CancellationToken ct = default)
     {
         IQueryable<T> query = noTracking
             ? _dbSet.AsNoTracking()
             : _dbSet;
 
-        return await query.Where(predicate).LastOrDefaultAsync();
+        return await query.Where(predicate).LastOrDefaultAsync(ct);
     }
 
-    public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
-        => await _dbSet.AnyAsync(predicate);
+    public virtual async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default)
+        => await _dbSet.AnyAsync(predicate, ct);
 
-    public async Task AddAsync(T entity)
-        => await _dbSet.AddAsync(entity);
+    public virtual async Task AddAsync(T entity, CancellationToken ct = default)
+        => await _dbSet.AddAsync(entity, ct);
 
-    public async Task AddRangeAsync(IEnumerable<T> entities)
-        => await _dbSet.AddRangeAsync(entities);
+    public virtual async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default)
+        => await _dbSet.AddRangeAsync(entities, ct);
 
-    public Task UpdateAsync(T entity)
+    public virtual Task UpdateAsync(T entity)
     {
         _dbSet.Update(entity);
         return Task.CompletedTask;
     }
 
-    public Task UpdateRangeAsync(IEnumerable<T> entities)
+    public virtual Task UpdateRangeAsync(IEnumerable<T> entities)
     {
         _dbSet.UpdateRange(entities);
         return Task.CompletedTask;
     }
 
-    public Task DeleteAsync(T entity)
+    public virtual Task DeleteAsync(T entity)
     {
         _dbSet.Remove(entity);
         return Task.CompletedTask;
     }
 
-    public Task DeleteRangeAsync(IEnumerable<T> entities)
+    public virtual Task DeleteRangeAsync(IEnumerable<T> entities)
     {
         _dbSet.RemoveRange(entities);
         return Task.CompletedTask;

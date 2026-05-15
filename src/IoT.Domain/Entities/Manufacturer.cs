@@ -8,5 +8,5 @@ public class Manufacturer : AggregateRoot
     public string? Country { get; set; }
     public string? ContactEmail { get; set; }
 
-    public ICollection<Device> Devices { get; set; } = new List<Device>();
+    public ICollection<Device> Devices { get; set; } = [];
 }

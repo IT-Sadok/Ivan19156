@@ -8,7 +8,7 @@ using IoT.Shared.Common;
 namespace IoT.Application.Queries.Devices.GetDeviceById;
 
 public class GetDeviceByIdQueryHandler
-    : IRequestHandler<GetDeviceByIdQuery, Result<DeviceDto>>
+    : IRequestHandler<GetDeviceByIdQuery, Result<DeviceResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -21,25 +21,25 @@ public class GetDeviceByIdQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<DeviceDto>> Handle(
+    public async Task<Result<DeviceResponse>> Handle(
         GetDeviceByIdQuery request,
         CancellationToken ct = default)
     {
         var cacheKey = $"devices:{request.Id}";
 
-        var cached = await _cache.GetAsync<DeviceDto>(cacheKey);
+        var cached = await _cache.GetAsync<DeviceResponse>(cacheKey);
         if (cached != null)
-            return Result<DeviceDto>.Success(cached);
+            return Result<DeviceResponse>.Success(cached);
 
-        var device = await _unitOfWork.Devices.GetWithDetailsAsync(request.Id);
+        var device = await _unitOfWork.Devices.GetWithDetailsAsync(request.Id, ct);
 
         if (device == null)
-            return Result<DeviceDto>.NotFound($"Device {request.Id} not found");
+            return Result<DeviceResponse>.NotFound($"Device {request.Id} not found");
 
-        var dto = _mapper.Map<DeviceDto>(device);
+        var dto = _mapper.Map<DeviceResponse>(device);
 
         await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
 
-        return Result<DeviceDto>.Success(dto);
+        return Result<DeviceResponse>.Success(dto);
     }
 }

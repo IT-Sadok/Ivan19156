@@ -8,4 +8,4 @@ namespace IoT.Application.Commands.Devices.CreateDevice;
 public record CreateDeviceCommand(
     string Name,
     DeviceType Type,
-    Guid? ManufacturerId) : IRequest<Result<DeviceDto>>;
+    Guid? ManufacturerId) : IRequest<Result<DeviceResponse>>;

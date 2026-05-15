@@ -42,7 +42,7 @@ public static class MediatorExtensions
             typeof(ValidationBehavior<,>));
  
         services.AddValidatorsFromAssembly(applicationAssembly);
-        services.AddValidatorsFromAssembly(typeof(DeviceDto).Assembly);
+        services.AddValidatorsFromAssembly(typeof(DeviceResponse).Assembly);
 
         return services;
     }

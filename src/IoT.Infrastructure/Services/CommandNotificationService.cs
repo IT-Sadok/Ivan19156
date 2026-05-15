@@ -2,6 +2,7 @@ using IoT.Domain.Entities;
 using IoT.Domain.Enums;
 using IoT.Interfaces;
 using IoT.Interfaces.Services;
+using Microsoft.Extensions.Logging;
 
 namespace IoT.Infrastructure.Services;
 
@@ -9,13 +10,16 @@ public class CommandNotificationService : ICommandNotificationService
 {
     private readonly ICommandHubNotifier _hubNotifier;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<CommandNotificationService> _logger;
 
     public CommandNotificationService(
         ICommandHubNotifier hubNotifier,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        ILogger<CommandNotificationService> logger)
     {
         _hubNotifier = hubNotifier;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task SendCommandToDeviceAsync(Guid deviceId, DeviceCommand command)
@@ -29,9 +33,9 @@ public class CommandNotificationService : ICommandNotificationService
             await _unitOfWork.DeviceCommands.UpdateAsync(command);
             await _unitOfWork.SaveChangesAsync();
         }
-        catch
+        catch (Exception ex)
         {
-            // Device offline — command remains with Created status
+            _logger.LogWarning(ex, "Device {DeviceId} is offline; command {CommandId} remains in Created status", deviceId, command.Id);
         }
     }
 }

@@ -1,10 +1,9 @@
 using IoT.Domain.Entities;
-using IoT.Domain.Enums;
 
 namespace IoT.Interfaces.Repositories;
 
 public interface IDeviceCommandRepository : IRepository<DeviceCommand>
 {
-    Task<IEnumerable<DeviceCommand>> GetPendingByDeviceIdAsync(Guid deviceId);
-    Task<IEnumerable<DeviceCommand>> GetByDeviceIdAsync(Guid deviceId);
+    Task<IEnumerable<DeviceCommand>> GetPendingByDeviceIdAsync(Guid deviceId, CancellationToken ct = default);
+    Task<IEnumerable<DeviceCommand>> GetByDeviceIdAsync(Guid deviceId, CancellationToken ct = default);
 }

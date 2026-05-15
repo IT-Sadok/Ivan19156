@@ -8,7 +8,7 @@ using IoT.Shared.Common;
 namespace IoT.Application.Queries.DeviceCommands.GetDeviceCommands;
 
 public class GetDeviceCommandsQueryHandler
-    : IRequestHandler<GetDeviceCommandsQuery, Result<IEnumerable<DeviceCommandDto>>>
+    : IRequestHandler<GetDeviceCommandsQuery, Result<IEnumerable<DeviceCommandResponse>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -21,23 +21,23 @@ public class GetDeviceCommandsQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<IEnumerable<DeviceCommandDto>>> Handle(
+    public async Task<Result<IEnumerable<DeviceCommandResponse>>> Handle(
         GetDeviceCommandsQuery request,
         CancellationToken ct = default)
     {
         var cacheKey = $"device:commands:{request.DeviceId}";
 
-        var cached = await _cache.GetAsync<IEnumerable<DeviceCommandDto>>(cacheKey);
+        var cached = await _cache.GetAsync<IEnumerable<DeviceCommandResponse>>(cacheKey);
         if (cached != null)
-            return Result<IEnumerable<DeviceCommandDto>>.Success(cached);
+            return Result<IEnumerable<DeviceCommandResponse>>.Success(cached);
 
         var commands = await _unitOfWork.DeviceCommands
-            .GetByDeviceIdAsync(request.DeviceId);
+            .GetByDeviceIdAsync(request.DeviceId, ct);
 
-        var dtos = _mapper.Map<IEnumerable<DeviceCommandDto>>(commands);
+        var dtos = _mapper.Map<IEnumerable<DeviceCommandResponse>>(commands);
 
         await _cache.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(2));
 
-        return Result<IEnumerable<DeviceCommandDto>>.Success(dtos);
+        return Result<IEnumerable<DeviceCommandResponse>>.Success(dtos);
     }
 }

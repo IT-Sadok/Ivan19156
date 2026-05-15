@@ -4,20 +4,22 @@ namespace IoT.Interfaces.Repositories;
 
 public interface IRepository<T> where T : class
 {
-    Task<T?> GetByIdAsync(Guid id);
-    Task<IEnumerable<T>> GetAllAsync();
+    Task<T?> GetByIdAsync(Guid id, CancellationToken ct = default);
+    Task<IEnumerable<T>> GetAllAsync(CancellationToken ct = default);
     IQueryable<T> Filter(
         Expression<Func<T, bool>>? predicate = null,
         bool noTracking = false);
     Task<T?> FirstOrDefaultAsync(
         Expression<Func<T, bool>> predicate,
-        bool noTracking = false);
+        bool noTracking = false,
+        CancellationToken ct = default);
     Task<T?> LastOrDefaultAsync(
         Expression<Func<T, bool>> predicate,
-        bool noTracking = false);
-    Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
-    Task AddAsync(T entity);
-    Task AddRangeAsync(IEnumerable<T> entities);
+        bool noTracking = false,
+        CancellationToken ct = default);
+    Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default);
+    Task AddAsync(T entity, CancellationToken ct = default);
+    Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default);
     Task UpdateAsync(T entity);
     Task UpdateRangeAsync(IEnumerable<T> entities);
     Task DeleteAsync(T entity);

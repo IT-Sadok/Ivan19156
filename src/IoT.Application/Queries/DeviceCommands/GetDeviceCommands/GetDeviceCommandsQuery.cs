@@ -5,4 +5,4 @@ using IoT.Shared.Common;
 namespace IoT.Application.Queries.DeviceCommands.GetDeviceCommands;
 
 public record GetDeviceCommandsQuery(Guid DeviceId)
-    : IRequest<Result<IEnumerable<DeviceCommandDto>>>;
+    : IRequest<Result<IEnumerable<DeviceCommandResponse>>>;

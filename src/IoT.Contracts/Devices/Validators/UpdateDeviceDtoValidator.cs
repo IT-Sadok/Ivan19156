@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace IoT.Contracts.Devices.Validators;
 
-public class UpdateDeviceDtoValidator : AbstractValidator<UpdateDeviceDto>
+public class UpdateDeviceRequestValidator : AbstractValidator<UpdateDeviceRequest>
 {
-    public UpdateDeviceDtoValidator()
+    public UpdateDeviceRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required")

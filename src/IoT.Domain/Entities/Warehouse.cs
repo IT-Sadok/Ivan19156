@@ -10,5 +10,5 @@ public class Warehouse : AggregateRoot
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
 
-    public ICollection<DeviceLocation> DeviceLocations { get; set; } = new List<DeviceLocation>();
+    public ICollection<DeviceLocation> DeviceLocations { get; set; } = [];
 }

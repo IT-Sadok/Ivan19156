@@ -9,7 +9,7 @@ using IoT.Shared.Common;
 namespace IoT.Application.Commands.Devices.CreateDevice;
 
 public class CreateDeviceCommandHandler
-    : IRequestHandler<CreateDeviceCommand, Result<DeviceDto>>
+    : IRequestHandler<CreateDeviceCommand, Result<DeviceResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ public class CreateDeviceCommandHandler
         _mapper = mapper;
     }
 
-    public async Task<Result<DeviceDto>> Handle(
+    public async Task<Result<DeviceResponse>> Handle(
         CreateDeviceCommand request,
         CancellationToken ct = default)
     {
@@ -33,9 +33,9 @@ public class CreateDeviceCommandHandler
             AdminStatus = DeviceAdminStatus.Active
         };
 
-        await _unitOfWork.Devices.AddAsync(device);
+        await _unitOfWork.Devices.AddAsync(device, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return Result<DeviceDto>.Success(_mapper.Map<DeviceDto>(device));
+        return Result<DeviceResponse>.Success(_mapper.Map<DeviceResponse>(device));
     }
 }

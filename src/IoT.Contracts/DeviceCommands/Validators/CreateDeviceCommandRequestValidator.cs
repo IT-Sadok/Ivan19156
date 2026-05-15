@@ -7,8 +7,7 @@ public class CreateDeviceCommandRequestValidator : AbstractValidator<CreateDevic
     public CreateDeviceCommandRequestValidator()
     {
         RuleFor(x => x.CommandTypeSlug)
-            .NotEmpty().WithMessage("CommandTypeSlug is required")
-            .MaximumLength(50).WithMessage("CommandTypeSlug must not exceed 50 characters");
+            .IsInEnum().WithMessage("Invalid command type");
 
         RuleFor(x => x.Priority)
             .InclusiveBetween(0, 2).WithMessage("Priority must be between 0 and 2");

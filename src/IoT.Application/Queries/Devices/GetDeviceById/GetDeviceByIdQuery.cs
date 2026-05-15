@@ -4,4 +4,4 @@ using IoT.Shared.Common;
 
 namespace IoT.Application.Queries.Devices.GetDeviceById;
 
-public record GetDeviceByIdQuery(Guid Id) : IRequest<Result<DeviceDto>>;
+public record GetDeviceByIdQuery(Guid Id) : IRequest<Result<DeviceResponse>>;

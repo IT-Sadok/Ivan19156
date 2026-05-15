@@ -17,7 +17,7 @@ public class ProcessTelemetryCommandHandler
         ProcessTelemetryCommand request,
         CancellationToken ct = default)
     {
-        await _publishEndpoint.Publish(new TelemetryReceived(
+        await _publishEndpoint.Publish(new TelemetryReceivedEvent(
             request.DeviceId,
             request.MessageId,
             request.Payload,

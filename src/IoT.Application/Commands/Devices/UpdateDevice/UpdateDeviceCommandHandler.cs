@@ -7,7 +7,7 @@ using IoT.Shared.Common;
 namespace IoT.Application.Commands.Devices.UpdateDevice;
 
 public class UpdateDeviceCommandHandler
-    : IRequestHandler<UpdateDeviceCommand, Result<DeviceDto>>
+    : IRequestHandler<UpdateDeviceCommand, Result<DeviceResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -18,14 +18,14 @@ public class UpdateDeviceCommandHandler
         _mapper = mapper;
     }
 
-    public async Task<Result<DeviceDto>> Handle(
+    public async Task<Result<DeviceResponse>> Handle(
         UpdateDeviceCommand request,
         CancellationToken ct = default)
     {
-        var device = await _unitOfWork.Devices.GetByIdAsync(request.Id);
+        var device = await _unitOfWork.Devices.GetByIdAsync(request.Id, ct);
 
         if (device == null)
-            return Result<DeviceDto>.NotFound($"Device {request.Id} not found");
+            return Result<DeviceResponse>.NotFound($"Device {request.Id} not found");
 
         device.Name = request.Name;
         device.AdminStatus = request.AdminStatus;
@@ -34,6 +34,6 @@ public class UpdateDeviceCommandHandler
         await _unitOfWork.Devices.UpdateAsync(device);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return Result<DeviceDto>.Success(_mapper.Map<DeviceDto>(device));
+        return Result<DeviceResponse>.Success(_mapper.Map<DeviceResponse>(device));
     }
 }

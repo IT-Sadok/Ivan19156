@@ -32,6 +32,7 @@ public static class InfrastructureServiceExtensions
         services.AddStackExchangeRedisCache(options =>
             options.Configuration = config.GetConnectionString("Redis"));
         services.AddScoped<ICommandNotificationService, CommandNotificationService>();
+        services.AddSingleton(TimeProvider.System);
 
         return services;
     }

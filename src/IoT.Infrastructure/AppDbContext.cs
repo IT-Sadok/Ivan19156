@@ -34,7 +34,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasDefaultValueSql("now()");
         });
         
-        // TPT для Device
+        // TPT for Device
         builder.Entity<Device>().ToTable("Devices");
         builder.Entity<SensorDevice>().ToTable("SensorDevices");
         builder.Entity<ActuatorDevice>().ToTable("ActuatorDevices");

@@ -1,4 +1,3 @@
-// IoT.Infrastructure/Consumers/TelemetryConsumer.cs
 using IoT.Domain.Entities;
 using IoT.Domain.Events;
 using IoT.Interfaces;
@@ -6,25 +5,26 @@ using MassTransit;
 
 namespace IoT.Infrastructure.Consumers;
 
-public class TelemetryConsumer : IConsumer<TelemetryReceived>
+public class TelemetryConsumer : IConsumer<TelemetryReceivedEvent>
 {
     private readonly IUnitOfWork _unitOfWork;
 
     public TelemetryConsumer(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task Consume(ConsumeContext<TelemetryReceived> context)
+    public async Task Consume(ConsumeContext<TelemetryReceivedEvent> context)
     {
         var message = context.Message;
+        var ct = context.CancellationToken;
 
         // Idempotency check
         var exists = await _unitOfWork.Telemetry
-            .ExistsAsync(message.DeviceId, message.MessageId);
+            .ExistsAsync(message.DeviceId, message.MessageId, ct);
 
         if (exists)
             return;
 
-        // Зберегти телеметрію
+        // Save telemetry record
         var record = new TelemetryRecord
         {
             Id = Guid.NewGuid(),
@@ -34,16 +34,16 @@ public class TelemetryConsumer : IConsumer<TelemetryReceived>
             ReceivedAt = message.ReceivedAt
         };
 
-        await _unitOfWork.Telemetry.AddAsync(record);
+        await _unitOfWork.Telemetry.AddAsync(record, ct);
 
-        // Оновити LastSeen девайса
-        var device = await _unitOfWork.Devices.GetByIdAsync(message.DeviceId);
+        // Update device LastSeen
+        var device = await _unitOfWork.Devices.GetByIdAsync(message.DeviceId, ct);
         if (device != null)
         {
             device.LastSeen = message.ReceivedAt;
             await _unitOfWork.Devices.UpdateAsync(device);
         }
 
-        await _unitOfWork.SaveChangesAsync(context.CancellationToken);
+        await _unitOfWork.SaveChangesAsync(ct);
     }
 }

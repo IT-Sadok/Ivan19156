@@ -1,4 +1,3 @@
-// IoT.Infrastructure/Repositories/DeviceRepository.cs
 using IoT.Domain.Entities;
 using IoT.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -7,33 +6,36 @@ namespace IoT.Infrastructure.Repositories;
 
 public class DeviceRepository : BaseRepository<Device>, IDeviceRepository
 {
-    public DeviceRepository(AppDbContext context) : base(context) { }
+    private readonly TimeProvider _timeProvider;
 
-    public async Task<IEnumerable<Device>> GetOfflineDevicesAsync()
+    public DeviceRepository(AppDbContext context, TimeProvider timeProvider) : base(context)
+        => _timeProvider = timeProvider;
+
+    public async Task<IEnumerable<Device>> GetOfflineDevicesAsync(CancellationToken ct = default)
     {
-        var threshold = DateTime.UtcNow.AddMinutes(-5);
+        var threshold = _timeProvider.GetUtcNow().AddMinutes(-5).UtcDateTime;
         return await _dbSet
             .Where(d => d.LastSeen < threshold || d.LastSeen == null)
             .Where(d => d.AdminStatus == Domain.Enums.DeviceAdminStatus.Active)
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<Device>> GetByWarehouseAsync(Guid warehouseId)
+    public async Task<IEnumerable<Device>> GetByWarehouseAsync(Guid warehouseId, CancellationToken ct = default)
     {
         return await _dbSet
             .Where(d => d.Locations.Any(l =>
                 l.WarehouseId == warehouseId &&
                 l.RemovedAt == null))
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<Device?> GetWithDetailsAsync(Guid id)
+    public async Task<Device?> GetWithDetailsAsync(Guid id, CancellationToken ct = default)
     {
         return await _dbSet
             .Include(d => d.Manufacturer)
             .Include(d => d.Locations)
             .ThenInclude(l => l.Warehouse)
             .Include(d => d.MaintenanceRecords)
-            .FirstOrDefaultAsync(d => d.Id == id);
+            .FirstOrDefaultAsync(d => d.Id == id, ct);
     }
 }

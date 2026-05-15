@@ -9,4 +9,4 @@ public record UpdateDeviceCommand(
     Guid Id,
     string Name,
     DeviceAdminStatus AdminStatus,
-    Guid? ManufacturerId) : IRequest<Result<DeviceDto>>;
+    Guid? ManufacturerId) : IRequest<Result<DeviceResponse>>;

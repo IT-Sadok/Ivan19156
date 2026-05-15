@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace IoT.Application.Queries.Devices.GetDevices;
 
 public class GetDevicesQueryHandler
-    : IRequestHandler<GetDevicesQuery, Result<PagedResult<DeviceDto>>>
+    : IRequestHandler<GetDevicesQuery, Result<PagedResult<DeviceResponse>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -24,15 +24,15 @@ public class GetDevicesQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<PagedResult<DeviceDto>>> Handle(
+    public async Task<Result<PagedResult<DeviceResponse>>> Handle(
         GetDevicesQuery request,
         CancellationToken ct = default)
     {
         var cacheKey = $"{CacheKeyPrefix}:p{request.Page}:ps{request.PageSize}:t{request.Type}:s{request.AdminStatus}:m{request.ManufacturerId}";
 
-        var cached = await _cache.GetAsync<PagedResult<DeviceDto>>(cacheKey);
+        var cached = await _cache.GetAsync<PagedResult<DeviceResponse>>(cacheKey);
         if (cached != null)
-            return Result<PagedResult<DeviceDto>>.Success(cached);
+            return Result<PagedResult<DeviceResponse>>.Success(cached);
 
         var query = _unitOfWork.Devices.Filter(noTracking: true);
 
@@ -54,9 +54,9 @@ public class GetDevicesQueryHandler
             .Take(request.PageSize)
             .ToListAsync(ct);
 
-        var result = new PagedResult<DeviceDto>
+        var result = new PagedResult<DeviceResponse>
         {
-            Items = _mapper.Map<IEnumerable<DeviceDto>>(devices),
+            Items = _mapper.Map<IEnumerable<DeviceResponse>>(devices),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize
@@ -64,6 +64,6 @@ public class GetDevicesQueryHandler
 
         await _cache.SetAsync(cacheKey, result, TimeSpan.FromMinutes(5));
 
-        return Result<PagedResult<DeviceDto>>.Success(result);
+        return Result<PagedResult<DeviceResponse>>.Success(result);
     }
 }

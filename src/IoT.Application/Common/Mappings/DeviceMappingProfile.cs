@@ -23,7 +23,7 @@ public class DeviceMappingProfile : Profile
                 src.AdminStatus,
                 src.ManufacturerId));
 
-        CreateMap<Device, DeviceDto>()
+        CreateMap<Device, DeviceResponse>()
             .ForMember(dest => dest.ManufacturerName,
                 opt => opt.MapFrom(src => src.Manufacturer != null 
                     ? src.Manufacturer.Name 

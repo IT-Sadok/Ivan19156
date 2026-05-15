@@ -1,6 +1,6 @@
 namespace IoT.Domain.Events;
 
-public record TelemetryReceived(
+public record TelemetryReceivedEvent(
     Guid DeviceId,
     Guid MessageId,
     string Payload,

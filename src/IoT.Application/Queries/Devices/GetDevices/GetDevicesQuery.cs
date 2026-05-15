@@ -9,4 +9,4 @@ public record GetDevicesQuery(
     int PageSize = 20,
     int? Type = null,
     int? AdminStatus = null,
-    Guid? ManufacturerId = null) : IRequest<Result<PagedResult<DeviceDto>>>;
+    Guid? ManufacturerId = null) : IRequest<Result<PagedResult<DeviceResponse>>>;

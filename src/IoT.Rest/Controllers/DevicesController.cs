@@ -23,7 +23,7 @@ public class DevicesController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] GetDevicesFilterDto filter)
+    public async Task<IActionResult> GetAll([FromQuery] GetDevicesFilter filter)
         => HandleResult(await _mediator.Send(
             new GetDevicesQuery(
                 filter.Page,

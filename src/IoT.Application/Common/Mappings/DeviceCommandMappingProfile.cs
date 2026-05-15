@@ -17,7 +17,7 @@ public class DeviceCommandMappingProfile : Profile
                 src.Priority,
                 src.ExpiresAt));
 
-        CreateMap<DeviceCommand, DeviceCommandDto>()
+        CreateMap<DeviceCommand, DeviceCommandResponse>()
             .ForMember(dest => dest.CommandTypeSlug,
                 opt => opt.MapFrom(src => src.CommandType.Slug));
     }

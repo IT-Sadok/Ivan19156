@@ -2,7 +2,7 @@ using IoT.Domain.Enums;
 
 namespace IoT.Contracts.Devices;
 
-public record DeviceDto(
+public record DeviceResponse(
     Guid Id,
     string Name,
     DeviceType Type,

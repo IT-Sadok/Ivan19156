@@ -13,6 +13,6 @@ public class Device : AggregateRoot
     public Guid? ManufacturerId { get; set; }
     public Manufacturer? Manufacturer { get; set; }
 
-    public ICollection<DeviceLocation> Locations { get; set; } = new List<DeviceLocation>();
-    public ICollection<MaintenanceRecord> MaintenanceRecords { get; set; } = new List<MaintenanceRecord>();
+    public ICollection<DeviceLocation> Locations { get; set; } = [];
+    public ICollection<MaintenanceRecord> MaintenanceRecords { get; set; } = [];
 }

@@ -1,6 +1,6 @@
 namespace IoT.Contracts.Devices;
 
-public record GetDevicesFilterDto(
+public record GetDevicesFilter(
     int Page = 1,
     int PageSize = 20,
     int? Type = null,
