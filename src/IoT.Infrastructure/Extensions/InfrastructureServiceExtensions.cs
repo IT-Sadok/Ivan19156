@@ -22,7 +22,8 @@ public static class InfrastructureServiceExtensions
         services.AddMassTransit(x =>
         {
             x.AddConsumer<TelemetryConsumer>();
-
+            x.AddConsumer<RulesEngineConsumer>();
+            
             x.UsingInMemory((context, cfg) =>
             {
                 cfg.ConfigureEndpoints(context);
