@@ -20,8 +20,8 @@ public interface IRepository<T> where T : class
     Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default);
     Task AddAsync(T entity, CancellationToken ct = default);
     Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default);
-    Task UpdateAsync(T entity);
-    Task UpdateRangeAsync(IEnumerable<T> entities);
-    Task DeleteAsync(T entity);
-    Task DeleteRangeAsync(IEnumerable<T> entities);
+    Task UpdateAsync(T entity, CancellationToken ct = default);
+    Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken ct = default);
+    Task DeleteAsync(T entity, CancellationToken ct = default);
+    Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken ct = default);
 }

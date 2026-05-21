@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     IDeviceCommandRepository DeviceCommands { get; }
     ICommandTypeRepository CommandTypes { get; }
     ITelemetryRepository Telemetry { get; }
+    IDeviceApiKeyRepository DeviceApiKeys { get; }
 
     Task<int> SaveChangesAsync(CancellationToken ct = default);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct = default);

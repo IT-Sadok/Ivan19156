@@ -31,11 +31,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
         if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             return Result<AuthResponse>.Unauthorized("Invalid credentials");
 
-        var token = GenerateJwt(user);
+        var token = await GenerateJwt(user);
         return Result<AuthResponse>.Success(token);
     }
 
-    private AuthResponse GenerateJwt(User user)
+    private async Task<AuthResponse> GenerateJwt(User user)
     {
         var secret = _config["Jwt:Secret"]!;
         var issuer = _config["Jwt:Issuer"]!;
@@ -45,15 +45,21 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim(ClaimTypes.Name, user.UserName!)
+        };
+        
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
         var token = new JwtSecurityToken(
             issuer: issuer,
             audience: audience,
-            claims: new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimTypes.Name, user.UserName!)
-            },
+            claims: claims,
             expires: expires,
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
         );

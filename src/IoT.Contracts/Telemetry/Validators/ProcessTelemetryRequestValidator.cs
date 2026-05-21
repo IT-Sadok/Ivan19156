@@ -1,5 +1,4 @@
 using FluentValidation;
-using IoT.Contracts.Telemetry;
 
 namespace IoT.Contracts.Telemetry.Validators;
 
@@ -7,9 +6,6 @@ public class ProcessTelemetryRequestValidator : AbstractValidator<ProcessTelemet
 {
     public ProcessTelemetryRequestValidator()
     {
-        RuleFor(x => x.DeviceId)
-            .NotEmpty().WithMessage("DeviceId is required");
-
         RuleFor(x => x.MessageId)
             .NotEmpty().WithMessage("MessageId is required");
 

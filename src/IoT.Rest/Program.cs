@@ -4,6 +4,8 @@ using IoT.Interfaces.Services;
 using IoT.Rest.Extensions;
 using IoT.Rest.Hubs;
 using IoT.Rest.Infrastructure;
+using IoT.Infrastructure.Seeders;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,12 +23,16 @@ builder.Services.AddScoped<ICommandHubNotifier, CommandHubNotifier>();
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddFilters();
 
 var app = builder.Build();
-
+await RoleSeeder.SeedAsync(app.Services);
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUi();
+    app.MapOpenApi();
+    app.MapScalarApiReference(options =>
+        options.WithTitle("IoT API")
+            .WithTheme(ScalarTheme.Moon));
 }
 app.MapHub<CommandHub>("/hubs/commands");
 app.UseExceptionHandler();
