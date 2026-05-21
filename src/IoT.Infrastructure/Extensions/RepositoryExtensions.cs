@@ -19,6 +19,8 @@ public static class RepositoryExtensions
         services.AddScoped<IDeviceCommandRepository, DeviceCommandRepository>();
         services.AddScoped<ICommandTypeRepository, CommandTypeRepository>();
         services.AddScoped<ITelemetryRepository, TelemetryRepository>();
+        services.AddScoped<IRuleRepository, RuleRepository>();
+        services.AddScoped<IAlertRepository, AlertRepository>();
         
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IDeviceApiKeyRepository, DeviceApiKeyRepository>();

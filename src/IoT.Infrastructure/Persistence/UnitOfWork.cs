@@ -14,6 +14,8 @@ public class UnitOfWork : IUnitOfWork
     private ICommandTypeRepository? _commandTypes;
     private ITelemetryRepository? _telemetry;
     private IDeviceApiKeyRepository? _deviceApiKeys;
+    private IRuleRepository? _rules;
+    private IAlertRepository? _alerts;
     
     private bool _disposed;
 
@@ -36,6 +38,11 @@ public class UnitOfWork : IUnitOfWork
         => _telemetry ??= new TelemetryRepository(_context);
     public IDeviceApiKeyRepository DeviceApiKeys
         => _deviceApiKeys ??= new DeviceApiKeyRepository(_context);
+    public IRuleRepository Rules
+        => _rules ??= new RuleRepository(_context);
+
+    public IAlertRepository Alerts
+        => _alerts ??= new AlertRepository(_context);
 
     public async Task<int> SaveChangesAsync(CancellationToken ct = default)
         => await _context.SaveChangesAsync(ct);
