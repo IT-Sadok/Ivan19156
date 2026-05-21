@@ -13,6 +13,8 @@ public class UnitOfWork : IUnitOfWork
     private IDeviceCommandRepository? _deviceCommands;
     private ICommandTypeRepository? _commandTypes;
     private ITelemetryRepository? _telemetry;
+    private IDeviceApiKeyRepository? _deviceApiKeys;
+    
     private bool _disposed;
 
     public UnitOfWork(AppDbContext context, TimeProvider timeProvider)
@@ -32,6 +34,8 @@ public class UnitOfWork : IUnitOfWork
 
     public ITelemetryRepository Telemetry
         => _telemetry ??= new TelemetryRepository(_context);
+    public IDeviceApiKeyRepository DeviceApiKeys
+        => _deviceApiKeys ??= new DeviceApiKeyRepository(_context);
 
     public async Task<int> SaveChangesAsync(CancellationToken ct = default)
         => await _context.SaveChangesAsync(ct);

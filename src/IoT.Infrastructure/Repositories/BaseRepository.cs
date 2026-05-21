@@ -68,25 +68,25 @@ public class BaseRepository<T> : IRepository<T> where T : class
     public virtual async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken ct = default)
         => await _dbSet.AddRangeAsync(entities, ct);
 
-    public virtual Task UpdateAsync(T entity)
+    public virtual Task UpdateAsync(T entity, CancellationToken ct = default)
     {
         _dbSet.Update(entity);
         return Task.CompletedTask;
     }
 
-    public virtual Task UpdateRangeAsync(IEnumerable<T> entities)
+    public virtual Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken ct = default)
     {
         _dbSet.UpdateRange(entities);
         return Task.CompletedTask;
     }
 
-    public virtual Task DeleteAsync(T entity)
+    public virtual Task DeleteAsync(T entity, CancellationToken ct = default)
     {
         _dbSet.Remove(entity);
         return Task.CompletedTask;
     }
 
-    public virtual Task DeleteRangeAsync(IEnumerable<T> entities)
+    public virtual Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken ct = default)
     {
         _dbSet.RemoveRange(entities);
         return Task.CompletedTask;

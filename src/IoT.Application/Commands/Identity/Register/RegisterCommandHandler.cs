@@ -30,7 +30,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<st
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
             return Result<string>.Failure(errors);
         }
-
+        await _userManager.AddToRoleAsync(user, request.Role.ToString());
+        
         return Result<string>.Success("User registered successfully");
     }
 }

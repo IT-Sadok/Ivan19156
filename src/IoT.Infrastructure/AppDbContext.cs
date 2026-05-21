@@ -22,6 +22,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<DeviceCommand> DeviceCommands { get; set; }
     public DbSet<CommandType> CommandTypes { get; set; }
     public DbSet<TelemetryRecord> TelemetryRecords { get; set; }
+    public DbSet<DeviceApiKey> DeviceApiKeys { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

@@ -21,6 +21,8 @@ public static class RepositoryExtensions
         services.AddScoped<ITelemetryRepository, TelemetryRepository>();
         
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<IDeviceApiKeyRepository, DeviceApiKeyRepository>();
+        services.AddScoped<IApiKeyService, ApiKeyService>();
         return services;
     }
 }

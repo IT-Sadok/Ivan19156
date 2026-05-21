@@ -1,11 +1,14 @@
 using AutoMapper;
 using IoT.Application.Commands.Devices.CreateDevice;
 using IoT.Application.Commands.Devices.DeleteDevice;
+using IoT.Application.Commands.Devices.GenerateApiKey;
 using IoT.Application.Commands.Devices.UpdateDevice;
 using IoT.Application.Queries.Devices.GetDeviceById;
 using IoT.Application.Queries.Devices.GetDevices;
 using IoT.Contracts.Devices;
+using IoT.Domain.Constants;
 using IoT.Interfaces.Mediator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IoT.Rest.Controllers;
@@ -54,4 +57,11 @@ public class DevicesController : BaseController
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
         => HandleResult(await _mediator.Send(new DeleteDeviceCommand(id)));
+    
+    [Authorize(Roles = Roles.Admin)]
+    [HttpPost("{id:guid}/api-keys")]
+    public async Task<IActionResult> GenerateApiKey(Guid id)
+        => HandleResult(await _mediator.Send(new GenerateApiKeyCommand(id)));
+    
+    
 }
