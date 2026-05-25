@@ -16,4 +16,10 @@ public class AlertRepository : BaseRepository<Alert>, IAlertRepository
         => await _dbSet
             .Where(a => a.DeviceId == deviceId && a.Status == AlertStatus.New)
             .ToListAsync(ct);
+    public async Task<IEnumerable<Alert>> GetActiveAsync(CancellationToken ct = default)
+        => await _dbSet
+            .Where(a => a.Status == AlertStatus.New)
+            .Include(a => a.Device)
+            .Include(a => a.Rule)
+            .ToListAsync(ct);
 }

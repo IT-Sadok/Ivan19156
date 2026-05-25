@@ -38,4 +38,8 @@ public class DeviceRepository : BaseRepository<Device>, IDeviceRepository
             .Include(d => d.MaintenanceRecords)
             .FirstOrDefaultAsync(d => d.Id == id, ct);
     }
+    public async Task<IEnumerable<Device>> GetAllWithStatusAsync(CancellationToken ct = default)
+        => await _dbSet
+            .Include(d => d.Manufacturer)
+            .ToListAsync(ct);
 }
