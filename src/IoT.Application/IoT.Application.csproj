@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IoT.Contracts\IoT.Contracts.csproj" />
+    <ProjectReference Include="..\IoT.Infrastructure\IoT.Infrastructure.csproj" />
     <ProjectReference Include="..\IoT.Interfaces\IoT.Interfaces.csproj" />
     <ProjectReference Include="..\IoT.Domain\IoT.Domain.csproj" />
     <ProjectReference Include="..\IoT.Shared\IoT.Shared.csproj" />
@@ -12,6 +13,10 @@
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="MassTransit" Version="8.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\Alerts\" />
   </ItemGroup>
 
   <PropertyGroup>

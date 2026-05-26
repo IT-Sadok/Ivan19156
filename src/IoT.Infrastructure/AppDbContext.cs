@@ -22,6 +22,11 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<DeviceCommand> DeviceCommands { get; set; }
     public DbSet<CommandType> CommandTypes { get; set; }
     public DbSet<TelemetryRecord> TelemetryRecords { get; set; }
+    public DbSet<DeviceApiKey> DeviceApiKeys { get; set; }
+    public DbSet<Rule> Rules { get; set; }
+    public DbSet<Alert> Alerts { get; set; }
+    public DbSet<AlertAcknowledgement> AlertAcknowledgements { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -73,6 +78,15 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         builder.Entity<TelemetryRecord>()
             .Property(t => t.ReceivedAt)
             .HasDefaultValueSql("now()");
+        
+        builder.Entity<Rule>()
+            .HasCheckConstraint(
+                "chk_rules_device_or_type",
+                "(\"DeviceId\" IS NULL) != (\"DeviceType\" IS NULL)");
+
+        builder.Entity<Alert>()
+            .HasIndex(a => new { a.DeviceId, a.Status })
+            .HasDatabaseName("idx_alerts_device_status");
 
         var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 

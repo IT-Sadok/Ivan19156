@@ -9,7 +9,12 @@ public class IdentityMappingProfile : Profile
 {
     public IdentityMappingProfile()
     {
-        CreateMap<RegisterRequest, RegisterCommand>();
+        CreateMap<RegisterRequest, RegisterCommand>()
+            .ConstructUsing(src => new RegisterCommand(
+                src.UserName,
+                src.Email,
+                src.Password,
+                src.Role));;
         CreateMap<LoginRequest, LoginCommand>();
     }
 }

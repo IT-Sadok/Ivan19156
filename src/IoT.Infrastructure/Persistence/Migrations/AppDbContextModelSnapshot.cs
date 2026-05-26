@@ -23,6 +23,73 @@ namespace IoT.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("IoT.Domain.Entities.Alert", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("RuleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("TriggeredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RuleId");
+
+                    b.HasIndex("DeviceId", "Status")
+                        .HasDatabaseName("idx_alerts_device_status");
+
+                    b.ToTable("Alerts", "public");
+                });
+
+            modelBuilder.Entity("IoT.Domain.Entities.AlertAcknowledgement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AcknowledgedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AlertId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcknowledgedById");
+
+                    b.HasIndex("AlertId");
+
+                    b.ToTable("AlertAcknowledgements", "public");
+                });
+
             modelBuilder.Entity("IoT.Domain.Entities.CommandType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -131,6 +198,42 @@ namespace IoT.Infrastructure.Persistence.Migrations
                     b.ToTable("Devices", "public");
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("IoT.Domain.Entities.DeviceApiKey", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("DeviceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("KeyHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastUsedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceId");
+
+                    b.ToTable("DeviceApiKeys", "public");
                 });
 
             modelBuilder.Entity("IoT.Domain.Entities.DeviceCommand", b =>
@@ -280,6 +383,59 @@ namespace IoT.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Manufacturers", "public");
+                });
+
+            modelBuilder.Entity("IoT.Domain.Entities.Rule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Action")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("DeviceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("DeviceType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Field")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Operator")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("DeviceId");
+
+                    b.ToTable("Rules", "public", t =>
+                        {
+                            t.HasCheckConstraint("chk_rules_device_or_type", "(\"DeviceId\" IS NULL) != (\"DeviceType\" IS NULL)");
+                        });
                 });
 
             modelBuilder.Entity("IoT.Domain.Entities.TelemetryRecord", b =>
@@ -597,6 +753,44 @@ namespace IoT.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("IoT.Domain.Entities.Alert", b =>
+                {
+                    b.HasOne("IoT.Domain.Entities.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IoT.Domain.Entities.Rule", "Rule")
+                        .WithMany()
+                        .HasForeignKey("RuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Device");
+
+                    b.Navigation("Rule");
+                });
+
+            modelBuilder.Entity("IoT.Domain.Entities.AlertAcknowledgement", b =>
+                {
+                    b.HasOne("IoT.Domain.Entities.User", "AcknowledgedBy")
+                        .WithMany()
+                        .HasForeignKey("AcknowledgedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IoT.Domain.Entities.Alert", "Alert")
+                        .WithMany("Acknowledgements")
+                        .HasForeignKey("AlertId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AcknowledgedBy");
+
+                    b.Navigation("Alert");
+                });
+
             modelBuilder.Entity("IoT.Domain.Entities.Device", b =>
                 {
                     b.HasOne("IoT.Domain.Entities.Manufacturer", "Manufacturer")
@@ -604,6 +798,17 @@ namespace IoT.Infrastructure.Persistence.Migrations
                         .HasForeignKey("ManufacturerId");
 
                     b.Navigation("Manufacturer");
+                });
+
+            modelBuilder.Entity("IoT.Domain.Entities.DeviceApiKey", b =>
+                {
+                    b.HasOne("IoT.Domain.Entities.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Device");
                 });
 
             modelBuilder.Entity("IoT.Domain.Entities.DeviceCommand", b =>
@@ -667,6 +872,23 @@ namespace IoT.Infrastructure.Persistence.Migrations
                     b.Navigation("Device");
 
                     b.Navigation("Technician");
+                });
+
+            modelBuilder.Entity("IoT.Domain.Entities.Rule", b =>
+                {
+                    b.HasOne("IoT.Domain.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IoT.Domain.Entities.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Device");
                 });
 
             modelBuilder.Entity("IoT.Domain.Entities.TelemetryRecord", b =>
@@ -747,6 +969,11 @@ namespace IoT.Infrastructure.Persistence.Migrations
                         .HasForeignKey("IoT.Domain.Entities.SensorDevice", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("IoT.Domain.Entities.Alert", b =>
+                {
+                    b.Navigation("Acknowledgements");
                 });
 
             modelBuilder.Entity("IoT.Domain.Entities.Device", b =>

@@ -18,11 +18,13 @@ public static class InfrastructureServiceExtensions
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(config.GetConnectionString("Default")));
+        services.Configure<AzureAIOptions>(config.GetSection(AzureAIOptions.SectionName));
         
         services.AddMassTransit(x =>
         {
             x.AddConsumer<TelemetryConsumer>();
-
+            x.AddConsumer<RulesEngineConsumer>();
+            
             x.UsingInMemory((context, cfg) =>
             {
                 cfg.ConfigureEndpoints(context);
@@ -33,6 +35,8 @@ public static class InfrastructureServiceExtensions
             options.Configuration = config.GetConnectionString("Redis"));
         services.AddScoped<ICommandNotificationService, CommandNotificationService>();
         services.AddSingleton(TimeProvider.System);
+        services.AddScoped<IAIAssistantService, AzureAIAssistantService>();
+        services.AddScoped<IoTContextBuilder>();
 
         return services;
     }

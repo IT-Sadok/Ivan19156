@@ -1,3 +1,4 @@
+using IoT.Contracts.Telemetry;
 using IoT.Domain.Entities;
 using IoT.Infrastructure.Persistence;
 using IoT.Interfaces.Repositories;
@@ -20,4 +21,16 @@ public class TelemetryRepository
         => await _dbSet.AnyAsync(t =>
             t.DeviceId == deviceId &&
             t.MessageId == messageId, ct);
+    
+    public async Task<IEnumerable<TelemetryRecentSummaryResponse>> GetRecentSummaryAsync(
+        DateTimeOffset since,
+        CancellationToken ct = default)
+        => await _dbSet
+            .Where(t => t.ReceivedAt > since)
+            .GroupBy(t => t.DeviceId)
+            .Select(g => new TelemetryRecentSummaryResponse(
+                g.Key,
+                g.Count(),
+                g.Max(t => t.ReceivedAt)))
+            .ToListAsync(ct);
 }
