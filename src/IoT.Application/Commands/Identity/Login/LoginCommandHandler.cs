@@ -31,11 +31,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
         if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             return Result<AuthResponse>.Unauthorized("Invalid credentials");
 
-        var token = await GenerateJwt(user);
+        var token = await GenerateJwtAsync(user);
         return Result<AuthResponse>.Success(token);
     }
 
-    private async Task<AuthResponse> GenerateJwt(User user)
+    private async Task<AuthResponse> GenerateJwtAsync(User user)
     {
         var secret = _config["Jwt:Secret"]!;
         var issuer = _config["Jwt:Issuer"]!;
