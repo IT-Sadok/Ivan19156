@@ -1,4 +1,3 @@
-using AutoMapper;
 using IoT.Application.Commands.Telemetry.ProcessTelemetry;
 using IoT.Contracts.Telemetry;
 using IoT.Interfaces.Mediator;

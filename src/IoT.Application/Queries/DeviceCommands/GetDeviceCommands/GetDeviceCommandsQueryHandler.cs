@@ -1,4 +1,4 @@
-using AutoMapper;
+using IoT.Application.Common.Mappings;
 using IoT.Contracts.DeviceCommands;
 using IoT.Interfaces;
 using IoT.Interfaces.Mediator;
@@ -11,13 +11,11 @@ public class GetDeviceCommandsQueryHandler
     : IRequestHandler<GetDeviceCommandsQuery, Result<IEnumerable<DeviceCommandResponse>>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     private readonly ICacheService _cache;
 
-    public GetDeviceCommandsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cache)
+    public GetDeviceCommandsQueryHandler(IUnitOfWork unitOfWork, ICacheService cache)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
         _cache = cache;
     }
 
@@ -34,7 +32,7 @@ public class GetDeviceCommandsQueryHandler
         var commands = await _unitOfWork.DeviceCommands
             .GetByDeviceIdAsync(request.DeviceId, ct);
 
-        var dtos = _mapper.Map<IEnumerable<DeviceCommandResponse>>(commands);
+        var dtos = commands.Select(c => c.ToResponse());
 
         await _cache.SetAsync(cacheKey, dtos, TimeSpan.FromMinutes(2));
 

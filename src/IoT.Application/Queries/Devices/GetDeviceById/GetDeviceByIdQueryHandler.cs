@@ -1,4 +1,4 @@
-using AutoMapper;
+using IoT.Application.Common.Mappings;
 using IoT.Contracts.Devices;
 using IoT.Interfaces;
 using IoT.Interfaces.Mediator;
@@ -11,13 +11,11 @@ public class GetDeviceByIdQueryHandler
     : IRequestHandler<GetDeviceByIdQuery, Result<DeviceResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     private readonly ICacheService _cache;
 
-    public GetDeviceByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cache)
+    public GetDeviceByIdQueryHandler(IUnitOfWork unitOfWork, ICacheService cache)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
         _cache = cache;
     }
 
@@ -36,7 +34,7 @@ public class GetDeviceByIdQueryHandler
         if (device == null)
             return Result<DeviceResponse>.NotFound($"Device {request.Id} not found");
 
-        var dto = _mapper.Map<DeviceResponse>(device);
+        var dto = device.ToResponse();
 
         await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
 

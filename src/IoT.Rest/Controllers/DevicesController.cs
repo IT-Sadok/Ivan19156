@@ -1,8 +1,6 @@
-using AutoMapper;
-using IoT.Application.Commands.Devices.CreateDevice;
 using IoT.Application.Commands.Devices.DeleteDevice;
 using IoT.Application.Commands.Devices.GenerateApiKey;
-using IoT.Application.Commands.Devices.UpdateDevice;
+using IoT.Application.Common.Mappings;
 using IoT.Application.Queries.Devices.GetDeviceById;
 using IoT.Application.Queries.Devices.GetDevices;
 using IoT.Contracts.Devices;
@@ -17,13 +15,9 @@ namespace IoT.Rest.Controllers;
 public class DevicesController : BaseController
 {
     private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
 
-    public DevicesController(IMediator mediator, IMapper mapper)
-    {
-        _mediator = mediator;
-        _mapper = mapper;
-    }
+    public DevicesController(IMediator mediator)
+        => _mediator = mediator;
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetDevicesFilter filter)
@@ -42,26 +36,20 @@ public class DevicesController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateDeviceRequest request)
     {
-        var command = _mapper.Map<CreateDeviceCommand>(request);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.ToCommand());
         return HandleCreatedResult(result, nameof(GetById), new { id = result.Value?.Id });
     }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateDeviceRequest request)
-    {
-        var command = _mapper.Map<UpdateDeviceCommand>(request) with { Id = id };
-        return HandleResult(await _mediator.Send(command));
-    }
+        => HandleResult(await _mediator.Send(request.ToCommand() with { Id = id }));
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
         => HandleResult(await _mediator.Send(new DeleteDeviceCommand(id)));
-    
+
     [Authorize(Roles = Roles.Admin)]
     [HttpPost("{id:guid}/api-keys")]
     public async Task<IActionResult> GenerateApiKey(Guid id)
         => HandleResult(await _mediator.Send(new GenerateApiKeyCommand(id)));
-    
-    
 }

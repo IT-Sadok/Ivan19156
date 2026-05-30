@@ -1,4 +1,4 @@
-using AutoMapper;
+using IoT.Application.Common.Mappings;
 using IoT.Contracts.Devices;
 using IoT.Domain.Enums;
 using IoT.Interfaces;
@@ -13,14 +13,12 @@ public class GetDevicesQueryHandler
     : IRequestHandler<GetDevicesQuery, Result<PagedResult<DeviceResponse>>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     private readonly ICacheService _cache;
     private const string CacheKeyPrefix = "devices:all";
 
-    public GetDevicesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cache)
+    public GetDevicesQueryHandler(IUnitOfWork unitOfWork, ICacheService cache)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
         _cache = cache;
     }
 
@@ -56,7 +54,7 @@ public class GetDevicesQueryHandler
 
         var result = new PagedResult<DeviceResponse>
         {
-            Items = _mapper.Map<IEnumerable<DeviceResponse>>(devices),
+            Items = devices.Select(d => d.ToResponse()),
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize
