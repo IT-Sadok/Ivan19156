@@ -1,4 +1,7 @@
 // IoT.Infrastructure/Extensions/InfrastructureServiceExtensions.cs
+
+using Azure;
+using Azure.AI.OpenAI;
 using IoT.Infrastructure.Persistence;
 using IoT.Infrastructure.Services;
 using IoT.Interfaces.Services;
@@ -7,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using IoT.Infrastructure.Consumers;
+using Microsoft.Extensions.Options;
 
 namespace IoT.Infrastructure.Extensions;
 
@@ -37,6 +41,13 @@ public static class InfrastructureServiceExtensions
         services.AddSingleton(TimeProvider.System);
         services.AddScoped<IAIAssistantService, AzureAIAssistantService>();
         services.AddScoped<IoTContextBuilder>();
+        services.AddSingleton(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<AzureAIOptions>>().Value;
+            return new AzureOpenAIClient(
+                new Uri(options.Endpoint),
+                new AzureKeyCredential(options.ApiKey));
+        });
 
         return services;
     }

@@ -23,14 +23,14 @@ public class RulesEngineConsumer : IConsumer<TelemetryReceivedEvent>
     {
         var message = context.Message;
         var ct = context.CancellationToken;
-
+        if (!TryParsePayload(message.Payload, out var payload)) return;
+        
         var device = await _unitOfWork.Devices.GetByIdAsync(message.DeviceId, ct);
         if (device == null) return;
 
         var rules = await _unitOfWork.Rules.GetActiveByDeviceAsync(message.DeviceId, device.Type, ct);
         if (!rules.Any()) return;
-
-        if (!TryParsePayload(message.Payload, out var payload)) return;
+        
 
         var triggeredAlerts = rules
             .Where(rule => EvaluateRule(rule, payload!))

@@ -16,7 +16,7 @@ public class ApiKeyAuthFilter : IAsyncActionFilter
         ActionExecutionDelegate next)
     {
         if (!context.HttpContext.Request.Headers
-                .TryGetValue("X-Api-Key", out var apiKey))
+                .TryGetValue(ApiConstants.ApiKeyHeader, out var apiKey))
         {
             context.Result = new UnauthorizedResult();
             return;
@@ -29,8 +29,8 @@ public class ApiKeyAuthFilter : IAsyncActionFilter
             context.Result = new UnauthorizedResult();
             return;
         }
-
-        context.HttpContext.Items["DeviceId"] = deviceId;
+        
+        context.HttpContext.Items[ApiConstants.DeviceIdItem] = deviceId;
 
         await next();
     }

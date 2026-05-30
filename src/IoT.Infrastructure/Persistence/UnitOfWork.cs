@@ -8,41 +8,35 @@ namespace IoT.Infrastructure.Persistence;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
-    private readonly TimeProvider _timeProvider;
-    private IDeviceRepository? _devices;
-    private IDeviceCommandRepository? _deviceCommands;
-    private ICommandTypeRepository? _commandTypes;
-    private ITelemetryRepository? _telemetry;
-    private IDeviceApiKeyRepository? _deviceApiKeys;
-    private IRuleRepository? _rules;
-    private IAlertRepository? _alerts;
-    
     private bool _disposed;
 
-    public UnitOfWork(AppDbContext context, TimeProvider timeProvider)
+    public UnitOfWork(
+        AppDbContext context,
+        IDeviceRepository devices,
+        IDeviceCommandRepository deviceCommands,
+        ICommandTypeRepository commandTypes,
+        ITelemetryRepository telemetry,
+        IDeviceApiKeyRepository deviceApiKeys,
+        IRuleRepository rules,
+        IAlertRepository alerts)
     {
         _context = context;
-        _timeProvider = timeProvider;
+        Devices = devices;
+        DeviceCommands = deviceCommands;
+        CommandTypes = commandTypes;
+        Telemetry = telemetry;
+        DeviceApiKeys = deviceApiKeys;
+        Rules = rules;
+        Alerts = alerts;
     }
 
-    public IDeviceRepository Devices
-        => _devices ??= new DeviceRepository(_context, _timeProvider);
-
-    public IDeviceCommandRepository DeviceCommands
-        => _deviceCommands ??= new DeviceCommandRepository(_context);
-
-    public ICommandTypeRepository CommandTypes
-        => _commandTypes ??= new CommandTypeRepository(_context);
-
-    public ITelemetryRepository Telemetry
-        => _telemetry ??= new TelemetryRepository(_context);
-    public IDeviceApiKeyRepository DeviceApiKeys
-        => _deviceApiKeys ??= new DeviceApiKeyRepository(_context);
-    public IRuleRepository Rules
-        => _rules ??= new RuleRepository(_context);
-
-    public IAlertRepository Alerts
-        => _alerts ??= new AlertRepository(_context);
+    public IDeviceRepository Devices { get; }
+    public IDeviceCommandRepository DeviceCommands { get; }
+    public ICommandTypeRepository CommandTypes { get; }
+    public ITelemetryRepository Telemetry { get; }
+    public IDeviceApiKeyRepository DeviceApiKeys { get; }
+    public IRuleRepository Rules { get; }
+    public IAlertRepository Alerts { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken ct = default)
         => await _context.SaveChangesAsync(ct);
@@ -67,8 +61,5 @@ public class UnitOfWork : IUnitOfWork
         _disposed = true;
     }
 
-    ~UnitOfWork()
-    {
-        Dispose(false);
-    }
+    ~UnitOfWork() => Dispose(false);
 }
