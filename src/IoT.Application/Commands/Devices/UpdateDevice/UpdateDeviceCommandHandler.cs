@@ -1,4 +1,4 @@
-using AutoMapper;
+using IoT.Application.Common.Mappings;
 using IoT.Contracts.Devices;
 using IoT.Interfaces;
 using IoT.Interfaces.Mediator;
@@ -10,13 +10,9 @@ public class UpdateDeviceCommandHandler
     : IRequestHandler<UpdateDeviceCommand, Result<DeviceResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
-    public UpdateDeviceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    public UpdateDeviceCommandHandler(IUnitOfWork unitOfWork)
+        => _unitOfWork = unitOfWork;
 
     public async Task<Result<DeviceResponse>> Handle(
         UpdateDeviceCommand request,
@@ -34,6 +30,6 @@ public class UpdateDeviceCommandHandler
         await _unitOfWork.Devices.UpdateAsync(device);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return Result<DeviceResponse>.Success(_mapper.Map<DeviceResponse>(device));
+        return Result<DeviceResponse>.Success(device.ToResponse());
     }
 }

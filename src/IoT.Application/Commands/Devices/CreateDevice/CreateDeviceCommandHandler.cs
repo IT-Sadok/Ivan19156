@@ -1,4 +1,4 @@
-using AutoMapper;
+using IoT.Application.Common.Mappings;
 using IoT.Contracts.Devices;
 using IoT.Domain.Entities;
 using IoT.Domain.Enums;
@@ -12,13 +12,9 @@ public class CreateDeviceCommandHandler
     : IRequestHandler<CreateDeviceCommand, Result<DeviceResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
-    public CreateDeviceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    public CreateDeviceCommandHandler(IUnitOfWork unitOfWork)
+        => _unitOfWork = unitOfWork;
 
     public async Task<Result<DeviceResponse>> Handle(
         CreateDeviceCommand request,
@@ -36,6 +32,6 @@ public class CreateDeviceCommandHandler
         await _unitOfWork.Devices.AddAsync(device, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return Result<DeviceResponse>.Success(_mapper.Map<DeviceResponse>(device));
+        return Result<DeviceResponse>.Success(device.ToResponse());
     }
 }
