@@ -4,6 +4,7 @@ using IoT.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Pgvector;
 
 namespace IoT.Infrastructure;
 
@@ -30,6 +31,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        builder.HasPostgresExtension("vector");
 
         builder.HasDefaultSchema("public");
 
@@ -102,6 +104,13 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             new SensorDevice { Id = Guid.Parse("b1c2d3e4-0001-0000-0000-000000000000"), Name = "Test Temperature Sensor", Type = DeviceType.Sensor, AdminStatus = DeviceAdminStatus.Active, SensorType = SensorType.Temperature, MeasurementUnit = "°C", CreatedAt = seedDate, UpdatedAt = seedDate },
             new SensorDevice { Id = Guid.Parse("b1c2d3e4-0002-0000-0000-000000000000"), Name = "Test Humidity Sensor",    Type = DeviceType.Sensor, AdminStatus = DeviceAdminStatus.Active, SensorType = SensorType.Humidity,    MeasurementUnit = "%",  CreatedAt = seedDate, UpdatedAt = seedDate }
         );
+        
+        builder.Entity<MaintenanceRecord>()
+            .Property(m => m.NotesEmbedding)
+            .HasColumnType("vector(1536)")
+            .HasConversion(
+                v => v == null ? null : new Vector(v),
+                v => v == null ? null : v.ToArray());
     }
     
     public override async Task<int> SaveChangesAsync(CancellationToken ct = default)

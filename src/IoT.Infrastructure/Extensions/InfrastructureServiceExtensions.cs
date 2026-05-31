@@ -49,12 +49,18 @@ public static class InfrastructureServiceExtensions
                 new Uri(options.Endpoint),
                 new AzureKeyCredential(options.ApiKey));
         });
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(config.GetConnectionString("Default"),
+                o => o.UseVector()));
 
         services.AddScoped<IAIFunction, GetOfflineDevicesFunction>();
         services.AddScoped<IAIFunction, GetActiveAlertsFunction>();
         services.AddScoped<IAIFunction, GetDeviceTelemetryFunction>();
         services.AddScoped<IAIFunction, GetDeviceCommandsFunction>();
         services.AddScoped<IAIFunction, GetSystemSummaryFunction>();
+        services.AddScoped<IAIFunction, SearchMaintenanceNotesFunction>();
+        
+        services.AddScoped<IEmbeddingService, EmbeddingService>();
         
         return services;
     }

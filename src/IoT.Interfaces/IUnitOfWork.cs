@@ -12,6 +12,7 @@ public interface IUnitOfWork : IDisposable
     IDeviceApiKeyRepository DeviceApiKeys { get; }
     IRuleRepository Rules { get; }
     IAlertRepository Alerts { get; }
+    IMaintenanceRecordRepository MaintenanceRecords { get; }
 
     Task<int> SaveChangesAsync(CancellationToken ct = default);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct = default);
