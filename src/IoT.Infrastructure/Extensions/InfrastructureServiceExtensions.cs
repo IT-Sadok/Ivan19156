@@ -2,6 +2,7 @@
 
 using Azure;
 using Azure.AI.OpenAI;
+using IoT.Infrastructure.AI.Functions;
 using IoT.Infrastructure.Persistence;
 using IoT.Infrastructure.Services;
 using IoT.Interfaces.Services;
@@ -49,6 +50,12 @@ public static class InfrastructureServiceExtensions
                 new AzureKeyCredential(options.ApiKey));
         });
 
+        services.AddScoped<IAIFunction, GetOfflineDevicesFunction>();
+        services.AddScoped<IAIFunction, GetActiveAlertsFunction>();
+        services.AddScoped<IAIFunction, GetDeviceTelemetryFunction>();
+        services.AddScoped<IAIFunction, GetDeviceCommandsFunction>();
+        services.AddScoped<IAIFunction, GetSystemSummaryFunction>();
+        
         return services;
     }
 }

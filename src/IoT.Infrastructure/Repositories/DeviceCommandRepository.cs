@@ -25,4 +25,11 @@ public class DeviceCommandRepository
             .Where(c => c.DeviceId == deviceId)
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync(ct);
+    
+    public async Task<IEnumerable<DeviceCommand>> GetCreatedByDeviceAsync(Guid deviceId, CancellationToken ct = default)
+        => await Filter(c => c.DeviceId == deviceId && c.Status == CommandStatus.Created)
+            .Include(c => c.CommandType)
+            .OrderByDescending(c => c.Priority)
+            .ToListAsync(ct);
 }
+

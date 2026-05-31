@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IoT.Rest.Controllers;
 
-[Authorize(Roles = $"{Roles.Admin},{Roles.Technician}")]
+//[Authorize(Roles = $"{Roles.Admin},{Roles.Technician}")]
 public class AssistantController(IMediator mediator) : BaseController
 {
     [HttpPost("query")]
