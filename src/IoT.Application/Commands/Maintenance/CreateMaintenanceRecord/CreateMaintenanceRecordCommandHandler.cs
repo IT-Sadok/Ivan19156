@@ -1,6 +1,5 @@
 using IoT.Application.Common.Mappings;
 using IoT.Contracts.Maintenance;
-using IoT.Domain.Entities;
 using IoT.Interfaces;
 using IoT.Interfaces.Mediator;
 using IoT.Interfaces.Services;
@@ -16,14 +15,7 @@ public class CreateMaintenanceRecordCommandHandler(
         CreateMaintenanceRecordCommand request,
         CancellationToken ct)
     {
-        var record = new MaintenanceRecord
-        {
-            Id = Guid.NewGuid(),
-            DeviceId = request.DeviceId,
-            TechnicianId = request.TechnicianId,
-            Notes = request.Notes,
-            PerformedAt = request.PerformedAt
-        };
+        var record = request.ToEntity();
 
         if (!string.IsNullOrWhiteSpace(request.Notes))
             record.NotesEmbedding = await embeddingService.GenerateEmbeddingAsync(request.Notes, ct);
@@ -33,4 +25,5 @@ public class CreateMaintenanceRecordCommandHandler(
 
         return Result<MaintenanceRecordResponse>.Success(record.ToResponse());
     }
+    
 }

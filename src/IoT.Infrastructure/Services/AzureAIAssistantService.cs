@@ -55,7 +55,9 @@ public class AzureAIAssistantService(
             new UserChatMessage(userQuery)
         };
 
-        while (true)
+        int remainingIterations = 10;
+
+        while (remainingIterations > 0)
         {
             var response = await chatClient.CompleteChatAsync(messages, chatOptions, ct);
 
@@ -76,6 +78,11 @@ public class AzureAIAssistantService(
                     messages.Add(new ToolChatMessage(toolCall.Id, result));
                 }
             }
+            else break;
+
+            remainingIterations--;
         }
+
+        return "Unable to process the request after maximum iterations.";
     }
 }

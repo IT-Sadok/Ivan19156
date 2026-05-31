@@ -21,4 +21,13 @@ public static class MaintenanceMappingExtensions
             request.TechnicianId,
             request.Notes,
             request.PerformedAt);
+    
+    public static MaintenanceRecord ToEntity(this CreateMaintenanceRecordCommand command) => new()
+    {
+        Id = Guid.NewGuid(),
+        DeviceId = command.DeviceId,
+        TechnicianId = command.TechnicianId,
+        Notes = command.Notes,
+        PerformedAt = command.PerformedAt
+    };
 }
