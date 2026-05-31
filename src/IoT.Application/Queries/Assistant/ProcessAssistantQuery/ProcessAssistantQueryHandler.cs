@@ -1,16 +1,22 @@
+using IoT.Application.Queries.Assistant.ProcessAssistantQuery;
+using IoT.Infrastructure.Services;
 using IoT.Interfaces.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
-
-namespace IoT.Application.Queries.Assistant.ProcessAssistantQuery;
+using Microsoft.Extensions.Options;
 
 public class ProcessAssistantQueryHandler(
     IAIAssistantService aiService,
-    IoTContextBuilder contextBuilder) : IRequestHandler<ProcessAssistantQuery, Result<string>>
+    IoTContextBuilder contextBuilder,
+    IOptions<AzureAIOptions> options) : IRequestHandler<ProcessAssistantQuery, Result<string>>
 {
     public async Task<Result<string>> Handle(ProcessAssistantQuery request, CancellationToken ct)
     {
-        var context = await contextBuilder.BuildAsync(ct);
+        string? context = null;
+
+        if (options.Value.Mode == AIAssistantMode.ContextInjection)
+            context = await contextBuilder.BuildAsync(ct);
+
         var answer = await aiService.ProcessQueryAsync(request.UserQuery, context, ct);
         return Result<string>.Success(answer);
     }

@@ -1,4 +1,3 @@
-// IoT.Infrastructure/Extensions/RepositoryExtensions.cs
 using IoT.Infrastructure.Persistence;
 using IoT.Infrastructure.Repositories;
 using IoT.Infrastructure.Services;
@@ -21,6 +20,7 @@ public static class RepositoryExtensions
         services.AddScoped<ITelemetryRepository, TelemetryRepository>();
         services.AddScoped<IRuleRepository, RuleRepository>();
         services.AddScoped<IAlertRepository, AlertRepository>();
+        services.AddScoped<IMaintenanceRecordRepository, MaintenanceRecordRepository>();
         
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IDeviceApiKeyRepository, DeviceApiKeyRepository>();

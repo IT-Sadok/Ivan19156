@@ -12,4 +12,6 @@ public class MaintenanceRecord : BaseEntity
 
     public string? Notes { get; set; }
     public DateTime PerformedAt { get; set; }
+    
+    public float[]? NotesEmbedding { get; set; }
 }

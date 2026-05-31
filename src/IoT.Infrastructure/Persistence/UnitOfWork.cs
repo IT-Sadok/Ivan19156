@@ -18,7 +18,8 @@ public class UnitOfWork : IUnitOfWork
         ITelemetryRepository telemetry,
         IDeviceApiKeyRepository deviceApiKeys,
         IRuleRepository rules,
-        IAlertRepository alerts)
+        IAlertRepository alerts,
+        IMaintenanceRecordRepository maintenanceRecords)
     {
         _context = context;
         Devices = devices;
@@ -28,6 +29,7 @@ public class UnitOfWork : IUnitOfWork
         DeviceApiKeys = deviceApiKeys;
         Rules = rules;
         Alerts = alerts;
+        MaintenanceRecords = maintenanceRecords;
     }
 
     public IDeviceRepository Devices { get; }
@@ -37,6 +39,7 @@ public class UnitOfWork : IUnitOfWork
     public IDeviceApiKeyRepository DeviceApiKeys { get; }
     public IRuleRepository Rules { get; }
     public IAlertRepository Alerts { get; }
+    public IMaintenanceRecordRepository MaintenanceRecords { get; }
 
     public async Task<int> SaveChangesAsync(CancellationToken ct = default)
         => await _context.SaveChangesAsync(ct);
