@@ -2,6 +2,9 @@
 
 using Azure;
 using Azure.AI.OpenAI;
+using IoT.Contracts.Events;
+using IoT.Contracts.Kafka;
+using IoT.Domain.Events;
 using IoT.Infrastructure.AI.Functions;
 using IoT.Infrastructure.Persistence;
 using IoT.Infrastructure.Services;
@@ -29,10 +32,67 @@ public static class InfrastructureServiceExtensions
         {
             x.AddConsumer<TelemetryConsumer>();
             x.AddConsumer<RulesEngineConsumer>();
-            
+            x.AddConsumer<EmbeddingGenerationConsumer>();
+
             x.UsingInMemory((context, cfg) =>
             {
                 cfg.ConfigureEndpoints(context);
+            });
+
+            x.AddRider(rider =>
+            {
+                // Producers
+                rider.AddProducer<TelemetryReceivedEvent>(KafkaTopics.Telemetry);
+                rider.AddProducer<MaintenanceRecordCreatedEvent>(KafkaTopics.EmbeddingGeneration);
+
+                // Consumers
+                rider.AddConsumer<TelemetryConsumer>();
+                rider.AddConsumer<RulesEngineConsumer>();
+                rider.AddConsumer<EmbeddingGenerationConsumer>();
+
+                rider.UsingKafka((context, k) =>
+                {
+                    k.Host(config["Kafka:BootstrapServers"]);
+
+                    k.TopicEndpoint<TelemetryReceivedEvent>(
+                        KafkaTopics.Telemetry,
+                        "iot-telemetry-processor",
+                        e =>
+                        {
+                            e.CreateIfMissing(t =>
+                            {
+                                t.NumPartitions = 1;
+                                t.ReplicationFactor = 1;
+                            });
+                            e.ConfigureConsumer<TelemetryConsumer>(context);
+                        });
+
+                    k.TopicEndpoint<TelemetryReceivedEvent>(
+                        KafkaTopics.Telemetry,
+                        "iot-rules-engine",
+                        e =>
+                        {
+                            e.CreateIfMissing(t =>
+                            {
+                                t.NumPartitions = 1;
+                                t.ReplicationFactor = 1;
+                            });
+                            e.ConfigureConsumer<RulesEngineConsumer>(context);
+                        });
+
+                    k.TopicEndpoint<MaintenanceRecordCreatedEvent>(
+                        KafkaTopics.EmbeddingGeneration,
+                        "iot-embedding-generator",
+                        e =>
+                        {
+                            e.CreateIfMissing(t =>
+                            {
+                                t.NumPartitions = 1;
+                                t.ReplicationFactor = 1;
+                            });
+                            e.ConfigureConsumer<EmbeddingGenerationConsumer>(context);
+                        });
+                });
             });
         });
         services.AddRepositories();
@@ -42,7 +102,7 @@ public static class InfrastructureServiceExtensions
         services.AddSingleton(TimeProvider.System);
         services.AddScoped<IAIAssistantService, AzureAIAssistantService>();
         services.AddScoped<IoTContextBuilder>();
-        services.AddSingleton(sp =>
+        services.AddSingleton(sp => 
         {
             var options = sp.GetRequiredService<IOptions<AzureAIOptions>>().Value;
             return new AzureOpenAIClient(
