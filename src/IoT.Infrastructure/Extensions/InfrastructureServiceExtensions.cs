@@ -30,7 +30,6 @@ public static class InfrastructureServiceExtensions
         services.Configure<AzureAIOptions>(config.GetSection(AzureAIOptions.SectionName));
         
         services.Configure<KafkaOptions>(config.GetSection(KafkaOptions.SectionName));
-        services.Configure<KafkaOptions>(config.GetSection(KafkaOptions.SectionName));
 
 services.AddMassTransit(x =>
 {
