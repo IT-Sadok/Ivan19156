@@ -56,7 +56,7 @@ public static class InfrastructureServiceExtensions
 
                     k.TopicEndpoint<TelemetryReceivedEvent>(
                         KafkaTopics.Telemetry,
-                        "iot-telemetry-processor",
+                        KafkaTopics.ConsumerGroups.TelemetryProcessor,
                         e =>
                         {
                             e.CreateIfMissing(t =>
@@ -69,7 +69,7 @@ public static class InfrastructureServiceExtensions
 
                     k.TopicEndpoint<TelemetryReceivedEvent>(
                         KafkaTopics.Telemetry,
-                        "iot-rules-engine",
+                        KafkaTopics.ConsumerGroups.RulesEngine,
                         e =>
                         {
                             e.CreateIfMissing(t =>
@@ -82,7 +82,7 @@ public static class InfrastructureServiceExtensions
 
                     k.TopicEndpoint<MaintenanceRecordCreatedEvent>(
                         KafkaTopics.EmbeddingGeneration,
-                        "iot-embedding-generator",
+                        KafkaTopics.ConsumerGroups.EmbeddingGenerator,
                         e =>
                         {
                             e.CreateIfMissing(t =>
