@@ -1,4 +1,5 @@
 using FluentValidation;
+using IoT.Contracts.Devices;
 
 namespace IoT.Contracts.Devices.Validators;
 
