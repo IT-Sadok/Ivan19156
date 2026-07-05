@@ -38,6 +38,9 @@ public class DeviceCommandTests : IAsyncLifetime
         var response = await _technicianClient
             .GetAsync($"/api/devices/{TestConstants.DeviceId}/commands");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var body = await response.Content.ReadFromJsonAsync<IEnumerable<DeviceCommandResponse>>();
+        body.Should().NotBeNull();
     }
 
     [Fact]

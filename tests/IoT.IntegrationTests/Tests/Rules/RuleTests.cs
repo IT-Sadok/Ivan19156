@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using IoT.Contracts;
+using IoT.Contracts.Alerts;
 using IoT.Domain.Enums;
 using IoT.IntegrationTests.Fixtures;
 using IoT.IntegrationTests.Infrastructure;
@@ -36,6 +37,9 @@ public class RuleTests : IAsyncLifetime
     {
         var response = await _client.GetAsync("/api/rules");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var body = await response.Content.ReadFromJsonAsync<IEnumerable<RuleResponse>>();
+        body.Should().NotBeNull();
     }
 
     [Fact]
@@ -62,6 +66,11 @@ public class RuleTests : IAsyncLifetime
 
         var response = await _adminClient.PostAsJsonAsync("/api/rules", request);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var body = await response.Content.ReadFromJsonAsync<RuleResponse>();
+        body.Should().NotBeNull();
+        body!.Name.Should().Be(request.name);
+        body.DeviceId.Should().Be(TestConstants.DeviceId);
     }
 
     [Fact]

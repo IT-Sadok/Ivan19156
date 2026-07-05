@@ -39,8 +39,12 @@ public class CreateMaintenanceRecordTests : IAsyncLifetime
 
         var response = await _client.PostAsJsonAsync(
             $"/api/devices/{_deviceId}/maintenance", request);
-        
+
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var body = await response.Content.ReadFromJsonAsync<MaintenanceRecordResponse>();
+        body.Should().NotBeNull();
+        body!.DeviceId.Should().Be(_deviceId);
+        body.Notes.Should().BeNull();
     }
 
     [Fact]

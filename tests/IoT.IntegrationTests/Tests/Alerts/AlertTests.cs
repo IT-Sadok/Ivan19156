@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using IoT.Contracts.Alerts;
 using IoT.IntegrationTests.Fixtures;
 using IoT.IntegrationTests.Infrastructure;
 
@@ -29,6 +30,9 @@ public class AlertTests : IAsyncLifetime
     {
         var response = await _client.GetAsync("/api/alerts");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var body = await response.Content.ReadFromJsonAsync<IEnumerable<AlertResponse>>();
+        body.Should().NotBeNull();
     }
 
     [Fact]
@@ -44,6 +48,10 @@ public class AlertTests : IAsyncLifetime
     {
         var response = await _client.GetAsync($"/api/alerts?deviceId={TestConstants.DeviceId}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var body = await response.Content.ReadFromJsonAsync<IEnumerable<AlertResponse>>();
+        body.Should().NotBeNull();
+        body!.Should().OnlyContain(a => a.DeviceId == TestConstants.DeviceId);
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
