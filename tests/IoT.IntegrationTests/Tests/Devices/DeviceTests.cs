@@ -14,19 +14,17 @@ namespace IoT.IntegrationTests.Tests.Devices;
 [Collection("Integration")]
 public class DeviceTests : IAsyncLifetime
 {
-    private HttpClient _client;
-    private AppDbContext _db;
-    private IoTWebApplicationFactory _factory = null!;
     private readonly IntegrationTestFixture _fixture;
+    private HttpClient _client = null!;
+    private AppDbContext _db = null!;
 
     public DeviceTests(IntegrationTestFixture fixture)
         => _fixture = fixture;
 
     public Task InitializeAsync()
     {
-        _factory = new IoTWebApplicationFactory(_fixture);
-        _client = _factory.CreateClient();
-        _db = _factory.Services.CreateScope()
+        _client = _fixture.Factory.CreateClient();
+        _db = _fixture.Factory.Services.CreateScope()
             .ServiceProvider
             .GetRequiredService<AppDbContext>();
         return Task.CompletedTask;

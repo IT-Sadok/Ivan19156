@@ -1,3 +1,4 @@
+using IoT.IntegrationTests.Infrastructure;
 using Testcontainers.Kafka;
 using Testcontainers.PostgreSql;
 using Testcontainers.Redis;
@@ -16,7 +17,7 @@ public class IntegrationTestFixture : IAsyncLifetime
     private readonly KafkaContainer _kafka = new KafkaBuilder()
         .WithImage("confluentinc/cp-kafka:7.6.0")
         .Build();
-    
+
     private readonly RedisContainer _redis = new RedisBuilder()
         .WithImage("redis:7")
         .Build();
@@ -25,16 +26,21 @@ public class IntegrationTestFixture : IAsyncLifetime
     public string KafkaBootstrapServers => _kafka.GetBootstrapAddress();
     public string RedisConnectionString => _redis.GetConnectionString();
 
+    public IoTWebApplicationFactory Factory { get; private set; } = null!;
+
     public async Task InitializeAsync()
     {
         await Task.WhenAll(
             _postgres.StartAsync(),
             _kafka.StartAsync(),
             _redis.StartAsync());
+
+        Factory = new IoTWebApplicationFactory(this);
     }
 
     public async Task DisposeAsync()
     {
+        await Factory.DisposeAsync();
         await Task.WhenAll(
             _postgres.StopAsync(),
             _kafka.StopAsync(),

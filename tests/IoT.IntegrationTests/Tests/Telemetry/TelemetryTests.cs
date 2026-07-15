@@ -16,20 +16,32 @@ public class TelemetryTests : IAsyncLifetime
     private readonly IntegrationTestFixture _fixture;
     private HttpClient _client = null!;
     private AppDbContext _db = null!;
-    private IoTWebApplicationFactory _factory = null!;
 
     public TelemetryTests(IntegrationTestFixture fixture)
         => _fixture = fixture;
 
     public Task InitializeAsync()
     {
-        _factory = new IoTWebApplicationFactory(_fixture);
-        _client = _factory.CreateClient();
+        _client = _fixture.Factory.CreateClient();
         _client.DefaultRequestHeaders.Add("X-Api-Key", "test-api-key");
-        _db = _factory.Services.CreateScope()
+        _db = _fixture.Factory.Services.CreateScope()
             .ServiceProvider
             .GetRequiredService<AppDbContext>();
         return Task.CompletedTask;
+    }
+
+    [Fact]
+    public async Task ProcessTelemetry_WithoutApiKey_ShouldReturn401()
+    {
+        var clientWithoutKey = _fixture.Factory.CreateClient(); 
+        var request = new
+        {
+            messageId = Guid.NewGuid(),
+            payload = """{"temperature": 20.0}"""
+        };
+
+        var response = await clientWithoutKey.PostAsJsonAsync("/api/telemetry", request);
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
@@ -108,20 +120,6 @@ public class TelemetryTests : IAsyncLifetime
         }, timeout: TimeSpan.FromSeconds(15));
 
         device!.LastSeen.Should().NotBeNull();
-    }
-
-    [Fact]
-    public async Task ProcessTelemetry_WithoutApiKey_ShouldReturn401()
-    {
-        var clientWithoutKey = _factory.CreateClient();
-        var request = new
-        {
-            messageId = Guid.NewGuid(),
-            payload = """{"temperature": 20.0}"""
-        };
-
-        var response = await clientWithoutKey.PostAsJsonAsync("/api/telemetry", request);
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
