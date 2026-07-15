@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using IoT.Infrastructure.Consumers;
 using IoT.Infrastructure.Options;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace IoT.Infrastructure.Extensions;
@@ -31,16 +32,13 @@ public static class InfrastructureServiceExtensions
         
         services.Configure<KafkaOptions>(config.GetSection(KafkaOptions.SectionName));
 
-services.AddMassTransit(x =>
+        services.AddMassTransit(x =>
 {
     x.AddConsumer<TelemetryConsumer>();
     x.AddConsumer<RulesEngineConsumer>();
     x.AddConsumer<EmbeddingGenerationConsumer>();
 
-    x.UsingInMemory((context, cfg) =>
-    {
-        cfg.ConfigureEndpoints(context);
-    });
+    x.UsingInMemory((ctx, cfg) => cfg.ConfigureEndpoints(ctx));
 
     x.AddRider(rider =>
     {
@@ -55,7 +53,10 @@ services.AddMassTransit(x =>
 
         rider.UsingKafka((context, k) =>
         {
-            k.Host(kafkaOptions.BootstrapServers);
+            var bootstrapServers = context.GetService<KafkaBootstrapOverride>()?.BootstrapServers
+                ?? kafkaOptions.BootstrapServers;
+
+            k.Host(bootstrapServers);
 
             k.TopicEndpoint<TelemetryReceivedEvent>(
                 kafkaOptions.Topics.Telemetry,
@@ -114,5 +115,53 @@ services.AddMassTransit(x =>
         services.AddScoped<IEmbeddingService, EmbeddingService>();
         
         return services;
+    }
+    
+    public static void AddKafkaRider(
+        this IBusRegistrationConfigurator x,
+        string bootstrapServers,
+        KafkaOptions kafkaOptions)
+    {
+        x.AddRider(rider =>
+        {
+            rider.AddProducer<TelemetryReceivedEvent>(kafkaOptions.Topics.Telemetry);
+            rider.AddProducer<MaintenanceRecordCreatedEvent>(kafkaOptions.Topics.EmbeddingGeneration);
+
+            rider.AddConsumer<TelemetryConsumer>();
+            rider.AddConsumer<RulesEngineConsumer>();
+            rider.AddConsumer<EmbeddingGenerationConsumer>();
+
+            rider.UsingKafka((context, k) =>
+            {
+                k.Host(bootstrapServers); 
+
+                k.TopicEndpoint<TelemetryReceivedEvent>(
+                    kafkaOptions.Topics.Telemetry,
+                    kafkaOptions.ConsumerGroups.TelemetryProcessor,
+                    e =>
+                    {
+                        e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
+                        e.ConfigureConsumer<TelemetryConsumer>(context);
+                    });
+
+                k.TopicEndpoint<TelemetryReceivedEvent>(
+                    kafkaOptions.Topics.Telemetry,
+                    kafkaOptions.ConsumerGroups.RulesEngine,
+                    e =>
+                    {
+                        e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
+                        e.ConfigureConsumer<RulesEngineConsumer>(context);
+                    });
+
+                k.TopicEndpoint<MaintenanceRecordCreatedEvent>(
+                    kafkaOptions.Topics.EmbeddingGeneration,
+                    kafkaOptions.ConsumerGroups.EmbeddingGenerator,
+                    e =>
+                    {
+                        e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
+                        e.ConfigureConsumer<EmbeddingGenerationConsumer>(context);
+                    });
+            });
+        });
     }
 }
