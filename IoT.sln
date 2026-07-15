@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		.dockerignore = .dockerignore
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Application", "src\IoT.Application\IoT.Application.csproj", "{1EFB7765-DAF4-459D-85B7-8BCA3DA9789A}"
 EndProject
@@ -19,6 +23,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.IntegrationTests", "tests\IoT.IntegrationTests\IoT.IntegrationTests.csproj", "{3B798F8A-58CC-4E7E-BBD7-3B4729F6E655}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github/workflows/", ".github/workflows/", "{73AB310E-0D17-4B04-AFD3-B0B5A4A762AD}"
+	ProjectSection(SolutionItems) = preProject
+		ci.yml = ci.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,5 +148,6 @@ Global
 		{DD28A379-DBCD-4BFF-A03A-E2F6377519B5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{D16CE495-50F4-4E54-BA43-1EC20180FDCD} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{3B798F8A-58CC-4E7E-BBD7-3B4729F6E655} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{73AB310E-0D17-4B04-AFD3-B0B5A4A762AD} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
