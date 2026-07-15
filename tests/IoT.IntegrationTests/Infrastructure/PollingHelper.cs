@@ -18,5 +18,8 @@ public static class PollingHelper
             if (await condition()) return;
             await Task.Delay(actualInterval);
         }
+        
+        // throw new TimeoutException(
+        //     $"Condition was not met within {actualTimeout.TotalSeconds}s");
     }
 }

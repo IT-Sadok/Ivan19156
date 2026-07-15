@@ -1,11 +1,14 @@
 using IoT.Domain.Entities;
 using IoT.Domain.Enums;
 using IoT.Infrastructure;
+using IoT.Infrastructure.Extensions;
+using IoT.Infrastructure.Options;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using IoT.IntegrationTests.Fixtures;
 using IoT.Interfaces.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -36,6 +39,8 @@ public class IoTWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
 
         builder.ConfigureServices(services =>
         {
+            services.AddSingleton(new KafkaBootstrapOverride(_fixture.KafkaBootstrapServers));
+
             ReplaceService<IApiKeyService>(services, _ => new MockApiKeyService(TestConstants.DeviceId));
             ReplaceService<IEmbeddingService>(services, _ => new MockEmbeddingService());
 

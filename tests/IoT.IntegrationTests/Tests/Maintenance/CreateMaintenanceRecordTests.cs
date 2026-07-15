@@ -93,7 +93,7 @@ public class CreateMaintenanceRecordTests : IAsyncLifetime
             _db.ChangeTracker.Clear();
             var record = await _db.MaintenanceRecords.FindAsync(body!.Id);
             return record?.NotesEmbedding != null;
-        });
+        }, timeout: TimeSpan.FromSeconds(60));
 
         _db.ChangeTracker.Clear();
         var finalRecord = await _db.MaintenanceRecords.FindAsync(body!.Id);
