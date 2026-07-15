@@ -6,21 +6,18 @@ using IoT.IntegrationTests.Fixtures;
 using IoT.IntegrationTests.Infrastructure;
 
 namespace IoT.IntegrationTests.Tests.Alerts;
-
 [Collection("Integration")]
 public class AlertTests : IAsyncLifetime
 {
     private readonly IntegrationTestFixture _fixture;
     private HttpClient _client = null!;
-    private IoTWebApplicationFactory _factory = null!;
 
     public AlertTests(IntegrationTestFixture fixture)
         => _fixture = fixture;
 
     public Task InitializeAsync()
     {
-        _factory = new IoTWebApplicationFactory(_fixture);
-        _client = _factory.CreateClient();
+        _client = _fixture.Factory.CreateClient();
         _client.SetBearerToken(TestConstants.TechnicianId);
         return Task.CompletedTask;
     }
@@ -30,7 +27,6 @@ public class AlertTests : IAsyncLifetime
     {
         var response = await _client.GetAsync("/api/alerts");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-
         var body = await response.Content.ReadFromJsonAsync<IEnumerable<AlertResponse>>();
         body.Should().NotBeNull();
     }
@@ -38,7 +34,7 @@ public class AlertTests : IAsyncLifetime
     [Fact]
     public async Task GetAlerts_WithoutAuth_ShouldReturn401()
     {
-        var clientWithoutAuth = _factory.CreateClient();
+        var clientWithoutAuth = _fixture.Factory.CreateClient();
         var response = await clientWithoutAuth.GetAsync("/api/alerts");
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -48,7 +44,6 @@ public class AlertTests : IAsyncLifetime
     {
         var response = await _client.GetAsync($"/api/alerts?deviceId={TestConstants.DeviceId}");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-
         var body = await response.Content.ReadFromJsonAsync<IEnumerable<AlertResponse>>();
         body.Should().NotBeNull();
         body!.Should().OnlyContain(a => a.DeviceId == TestConstants.DeviceId);

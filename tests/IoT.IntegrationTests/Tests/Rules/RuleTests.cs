@@ -15,22 +15,27 @@ public class RuleTests : IAsyncLifetime
     private readonly IntegrationTestFixture _fixture;
     private HttpClient _client = null!;
     private HttpClient _adminClient = null!;
-    private IoTWebApplicationFactory _factory = null!;
 
     public RuleTests(IntegrationTestFixture fixture)
         => _fixture = fixture;
 
     public Task InitializeAsync()
     {
-        _factory = new IoTWebApplicationFactory(_fixture);
-
-        _client = _factory.CreateClient();
+        _client = _fixture.Factory.CreateClient();
         _client.SetBearerToken(TestConstants.TechnicianId, "Technician");
 
-        _adminClient = _factory.CreateClient();
+        _adminClient = _fixture.Factory.CreateClient();
         _adminClient.SetBearerToken(TestConstants.TechnicianId, "Admin");
 
         return Task.CompletedTask;
+    }
+
+    [Fact]
+    public async Task GetRules_WithoutAuth_ShouldReturn401()
+    {
+        var clientWithoutAuth = _fixture.Factory.CreateClient(); 
+        var response = await clientWithoutAuth.GetAsync("/api/rules");
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
     [Fact]
     public async Task GetRules_ShouldReturn200()
@@ -40,14 +45,6 @@ public class RuleTests : IAsyncLifetime
 
         var body = await response.Content.ReadFromJsonAsync<IEnumerable<RuleResponse>>();
         body.Should().NotBeNull();
-    }
-
-    [Fact]
-    public async Task GetRules_WithoutAuth_ShouldReturn401()
-    {
-        var clientWithoutAuth = _factory.CreateClient();
-        var response = await clientWithoutAuth.GetAsync("/api/rules");
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
