@@ -32,3 +32,12 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+#terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/terraform.tfvars
+
+#kubernetes
+k8s/secret.yaml
