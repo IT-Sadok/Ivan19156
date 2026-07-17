@@ -33,7 +33,13 @@ public class IoTWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLi
                 ["ConnectionStrings:Redis"] = _fixture.RedisConnectionString,
                 ["Jwt:Secret"] = TestConstants.Jwt.Secret,
                 ["Jwt:Issuer"] = TestConstants.Jwt.Issuer,
-                ["Jwt:Audience"] = TestConstants.Jwt.Audience
+                ["Jwt:Audience"] = TestConstants.Jwt.Audience,
+                
+                ["Kafka:Topics:Telemetry"] = "iot.telemetry",
+                ["Kafka:Topics:EmbeddingGeneration"] = "iot.embedding-generation",
+                ["Kafka:ConsumerGroups:TelemetryProcessor"] = "iot.telemetry-processor",
+                ["Kafka:ConsumerGroups:RulesEngine"] = "iot.rules-engine",
+                ["Kafka:ConsumerGroups:EmbeddingGenerator"] = "iot.embedding-generator"
             });
         });
 
