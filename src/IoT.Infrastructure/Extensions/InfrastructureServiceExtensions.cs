@@ -53,27 +53,28 @@ public static class InfrastructureServiceExtensions
 
         rider.UsingKafka((context, k) =>
         {
+            var opts = context.GetRequiredService<IOptions<KafkaOptions>>().Value;
+    
             var bootstrapServers = context.GetService<KafkaBootstrapOverride>()?.BootstrapServers
-                ?? kafkaOptions.BootstrapServers;
+                                   ?? opts.BootstrapServers;
 
             k.Host(bootstrapServers, h =>
             {
-                // SASL for Azure Event Hubs
-                if (!string.IsNullOrEmpty(kafkaOptions.ConnectionString))
+                if (!string.IsNullOrEmpty(opts.ConnectionString))
                 {
                     h.UseSasl(sasl =>
                     {
                         sasl.SecurityProtocol = Confluent.Kafka.SecurityProtocol.SaslSsl;
                         sasl.Mechanism = Confluent.Kafka.SaslMechanism.Plain;
                         sasl.Username = "$ConnectionString";
-                        sasl.Password = kafkaOptions.ConnectionString;
+                        sasl.Password = opts.ConnectionString;
                     });
                 }
             });
 
             k.TopicEndpoint<TelemetryReceivedEvent>(
-                kafkaOptions.Topics.Telemetry,
-                kafkaOptions.ConsumerGroups.TelemetryProcessor,
+                opts.Topics.Telemetry,
+                opts.ConsumerGroups.TelemetryProcessor,
                 e =>
                 {
                     e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
@@ -81,8 +82,8 @@ public static class InfrastructureServiceExtensions
                 });
 
             k.TopicEndpoint<TelemetryReceivedEvent>(
-                kafkaOptions.Topics.Telemetry,
-                kafkaOptions.ConsumerGroups.RulesEngine,
+                opts.Topics.Telemetry,
+                opts.ConsumerGroups.RulesEngine,
                 e =>
                 {
                     e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
@@ -90,8 +91,8 @@ public static class InfrastructureServiceExtensions
                 });
 
             k.TopicEndpoint<MaintenanceRecordCreatedEvent>(
-                kafkaOptions.Topics.EmbeddingGeneration,
-                kafkaOptions.ConsumerGroups.EmbeddingGenerator,
+                opts.Topics.EmbeddingGeneration,
+                opts.ConsumerGroups.EmbeddingGenerator,
                 e =>
                 {
                     e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
@@ -146,24 +147,28 @@ public static class InfrastructureServiceExtensions
 
             rider.UsingKafka((context, k) =>
             {
+                var opts = context.GetRequiredService<IOptions<KafkaOptions>>().Value;
+    
+                var bootstrapServers = context.GetService<KafkaBootstrapOverride>()?.BootstrapServers
+                                       ?? opts.BootstrapServers;
+
                 k.Host(bootstrapServers, h =>
                 {
-                    // SASL for Azure Event Hubs
-                    if (!string.IsNullOrEmpty(kafkaOptions.ConnectionString))
+                    if (!string.IsNullOrEmpty(opts.ConnectionString))
                     {
                         h.UseSasl(sasl =>
                         {
                             sasl.SecurityProtocol = Confluent.Kafka.SecurityProtocol.SaslSsl;
                             sasl.Mechanism = Confluent.Kafka.SaslMechanism.Plain;
                             sasl.Username = "$ConnectionString";
-                            sasl.Password = kafkaOptions.ConnectionString;
+                            sasl.Password = opts.ConnectionString;
                         });
                     }
-                }); 
+                });
 
                 k.TopicEndpoint<TelemetryReceivedEvent>(
-                    kafkaOptions.Topics.Telemetry,
-                    kafkaOptions.ConsumerGroups.TelemetryProcessor,
+                    opts.Topics.Telemetry,
+                    opts.ConsumerGroups.TelemetryProcessor,
                     e =>
                     {
                         e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
@@ -171,8 +176,8 @@ public static class InfrastructureServiceExtensions
                     });
 
                 k.TopicEndpoint<TelemetryReceivedEvent>(
-                    kafkaOptions.Topics.Telemetry,
-                    kafkaOptions.ConsumerGroups.RulesEngine,
+                    opts.Topics.Telemetry,
+                    opts.ConsumerGroups.RulesEngine,
                     e =>
                     {
                         e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
@@ -180,8 +185,8 @@ public static class InfrastructureServiceExtensions
                     });
 
                 k.TopicEndpoint<MaintenanceRecordCreatedEvent>(
-                    kafkaOptions.Topics.EmbeddingGeneration,
-                    kafkaOptions.ConsumerGroups.EmbeddingGenerator,
+                    opts.Topics.EmbeddingGeneration,
+                    opts.ConsumerGroups.EmbeddingGenerator,
                     e =>
                     {
                         e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
