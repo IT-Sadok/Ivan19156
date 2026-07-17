@@ -13,18 +13,22 @@ namespace IoT.IntegrationTests.Tests.Maintenance;
 [Collection("Integration")]
 public class CreateMaintenanceRecordTests : IAsyncLifetime
 {
-    private readonly HttpClient _client;
-    private readonly AppDbContext _db;
+    private readonly IntegrationTestFixture _fixture;
+    private HttpClient _client = null!;
+    private AppDbContext _db = null!;
     private readonly Guid _deviceId = TestConstants.DeviceId;
     private readonly Guid _technicianId = TestConstants.TechnicianId;
 
     public CreateMaintenanceRecordTests(IntegrationTestFixture fixture)
+        => _fixture = fixture;
+
+    public Task InitializeAsync()
     {
-        var factory = new IoTWebApplicationFactory(fixture);
-        _client = factory.CreateClient();
-        _db = factory.Services.CreateScope()
+        _client = _fixture.Factory.CreateClient();
+        _db = _fixture.Factory.Services.CreateScope()
             .ServiceProvider
             .GetRequiredService<AppDbContext>();
+        return Task.CompletedTask;
     }
 
     [Fact]
@@ -100,7 +104,5 @@ public class CreateMaintenanceRecordTests : IAsyncLifetime
         finalRecord.Should().NotBeNull();
         finalRecord!.NotesEmbedding.Should().NotBeNull();
     }
-
-    public Task InitializeAsync() => Task.CompletedTask;
     public Task DisposeAsync() => Task.CompletedTask;
 }
