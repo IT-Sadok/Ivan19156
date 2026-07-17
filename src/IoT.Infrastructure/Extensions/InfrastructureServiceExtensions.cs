@@ -56,7 +56,20 @@ public static class InfrastructureServiceExtensions
             var bootstrapServers = context.GetService<KafkaBootstrapOverride>()?.BootstrapServers
                 ?? kafkaOptions.BootstrapServers;
 
-            k.Host(bootstrapServers);
+            k.Host(bootstrapServers, h =>
+            {
+                // SASL for Azure Event Hubs
+                if (!string.IsNullOrEmpty(kafkaOptions.ConnectionString))
+                {
+                    h.UseSasl(sasl =>
+                    {
+                        sasl.SecurityProtocol = Confluent.Kafka.SecurityProtocol.SaslSsl;
+                        sasl.Mechanism = Confluent.Kafka.SaslMechanism.Plain;
+                        sasl.Username = "$ConnectionString";
+                        sasl.Password = kafkaOptions.ConnectionString;
+                    });
+                }
+            });
 
             k.TopicEndpoint<TelemetryReceivedEvent>(
                 kafkaOptions.Topics.Telemetry,
@@ -133,7 +146,20 @@ public static class InfrastructureServiceExtensions
 
             rider.UsingKafka((context, k) =>
             {
-                k.Host(bootstrapServers); 
+                k.Host(bootstrapServers, h =>
+                {
+                    // SASL for Azure Event Hubs
+                    if (!string.IsNullOrEmpty(kafkaOptions.ConnectionString))
+                    {
+                        h.UseSasl(sasl =>
+                        {
+                            sasl.SecurityProtocol = Confluent.Kafka.SecurityProtocol.SaslSsl;
+                            sasl.Mechanism = Confluent.Kafka.SaslMechanism.Plain;
+                            sasl.Username = "$ConnectionString";
+                            sasl.Password = kafkaOptions.ConnectionString;
+                        });
+                    }
+                }); 
 
                 k.TopicEndpoint<TelemetryReceivedEvent>(
                     kafkaOptions.Topics.Telemetry,
