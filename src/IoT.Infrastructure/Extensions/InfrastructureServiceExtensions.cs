@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using IoT.Infrastructure.Consumers;
 using IoT.Infrastructure.Options;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace IoT.Infrastructure.Extensions;
@@ -57,7 +58,10 @@ public static class InfrastructureServiceExtensions
     
             var bootstrapServers = context.GetService<KafkaBootstrapOverride>()?.BootstrapServers
                                    ?? opts.BootstrapServers;
-
+            var logger = context.GetRequiredService<ILoggerFactory>().CreateLogger("KafkaSetup");
+    
+            logger.LogInformation("Kafka ConnectionString is null: {IsNull}", string.IsNullOrEmpty(opts.ConnectionString));
+            logger.LogInformation("Kafka BootstrapServers: {Servers}", opts.BootstrapServers);
             k.Host(bootstrapServers, h =>
             {
                 if (!string.IsNullOrEmpty(opts.ConnectionString))
@@ -152,6 +156,10 @@ public static class InfrastructureServiceExtensions
                 var bootstrapServers = context.GetService<KafkaBootstrapOverride>()?.BootstrapServers
                                        ?? opts.BootstrapServers;
 
+                var logger = context.GetRequiredService<ILoggerFactory>().CreateLogger("KafkaSetup");
+    
+                logger.LogInformation("Kafka ConnectionString is null: {IsNull}", string.IsNullOrEmpty(opts.ConnectionString));
+                logger.LogInformation("Kafka BootstrapServers: {Servers}", opts.BootstrapServers);
                 k.Host(bootstrapServers, h =>
                 {
                     if (!string.IsNullOrEmpty(opts.ConnectionString))
