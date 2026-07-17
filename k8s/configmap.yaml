@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iot-api-config
+data:
+  Jwt__Issuer: "IoT.Api"
+  Jwt__Audience: "IoT.Client"
+  Jwt__ExpiresInMinutes: "60"
+  Logging__LogLevel__Default: "Information"
+  Logging__LogLevel__Microsoft.AspNetCore: "Warning"
+  AzureAI__DeploymentName: "gpt-4.1-mini"
+  AzureAI__EmbeddingDeploymentName: "text-embedding-3-small"
+  AzureAI__Mode: "AzureOpenAI"
+  AzureAI__SystemPrompt: "You are an IoT system monitoring assistant. Answer questions based ONLY on the provided system snapshot data. Be concise and precise. If data is not in the snapshot, say so. Always respond in the same language the user used."
+  Kafka__BootstrapServers: "iot-eventhubs.servicebus.windows.net:9093"
+  Kafka__Topics__Telemetry: "iot.telemetry"
+  Kafka__Topics__EmbeddingGeneration: "iot.embedding-generation"
+  Kafka__ConsumerGroups__TelemetryProcessor: "iot.telemetry-processor"
+  Kafka__ConsumerGroups__RulesEngine: "iot.rules-engine"
+  Kafka__ConsumerGroups__EmbeddingGenerator: "iot.embedding-generator"
