@@ -63,6 +63,13 @@ resource "azurerm_postgresql_flexible_server" "main" {
   }
 }
 
+resource "azurerm_postgresql_flexible_server_database" "main" {
+  name      = "iot_db"
+  server_id = azurerm_postgresql_flexible_server.main.id
+  charset   = "UTF8"
+  collation = "en_US.utf8"
+}
+
 resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_azure" {
   name             = "allow-azure-services"
   server_id        = azurerm_postgresql_flexible_server.main.id
