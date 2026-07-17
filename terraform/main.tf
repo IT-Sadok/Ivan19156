@@ -63,6 +63,12 @@ resource "azurerm_postgresql_flexible_server" "main" {
   }
 }
 
+resource "azurerm_postgresql_flexible_server_configuration" "vector" {
+  name      = "azure.extensions"
+  server_id = azurerm_postgresql_flexible_server.main.id
+  value     = "VECTOR"
+}
+
 resource "azurerm_postgresql_flexible_server_database" "main" {
   name      = "iot_db"
   server_id = azurerm_postgresql_flexible_server.main.id

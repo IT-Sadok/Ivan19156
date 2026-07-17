@@ -18,3 +18,6 @@ data:
   Kafka__ConsumerGroups__TelemetryProcessor: "iot.telemetry-processor"
   Kafka__ConsumerGroups__RulesEngine: "iot.rules-engine"
   Kafka__ConsumerGroups__EmbeddingGenerator: "iot.embedding-generator"
+  Kafka__SecurityProtocol: "SaslSsl"
+  Kafka__SaslMechanism: "Plain"
+  Kafka__SaslUsername: "$ConnectionString"
