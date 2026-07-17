@@ -52,4 +52,5 @@ jobs:
           kubectl apply -f k8s/redis.yaml
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
+          kubectl set image deployment/iot-api iot-api=${{ secrets.ACR_LOGIN_SERVER }}/iot-api:${{ github.event.workflow_run.head_sha }}
           kubectl rollout restart deployment/iot-api
