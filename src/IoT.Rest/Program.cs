@@ -11,6 +11,7 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddSerilogLogging();
 builder.Services.AddControllers();
 builder.Services.AddApiServices();
 builder.Services.AddOpenApi();
