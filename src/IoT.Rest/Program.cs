@@ -12,6 +12,7 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddSerilogLogging();
+builder.AddMetrics();
 builder.Services.AddControllers();
 builder.Services.AddApiServices();
 builder.Services.AddOpenApi();
@@ -30,6 +31,7 @@ builder.Services.AddFilters();
 
 var app = builder.Build();
 
+app.UseMetrics();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
