@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'iot-api'
+    static_configs:
+      - targets: ['host.docker.internal:5246']
+    metrics_path: '/metrics'
