@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build:*)",
+      "Bash(dotnet restore:*)",
+      "Bash(dotnet package:*)",
+      "Bash(Remove-Item *)",
+      "Bash(dotnet ef *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Ільків Іван\\\\RiderProjects\\\\IoT\" -Recurse -Directory)",
+      "Bash(Select-Object FullName)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(grep -r \"IConsumer\\\\|EventHandler\\\\|Handler\" ./src --include=\"*.cs\" ! -path \"*/obj/*\" ! -path \"*/bin/*\")"
+    ]
+  }
+}
