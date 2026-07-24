@@ -7,12 +7,14 @@ using IoT.Rest.Hubs;
 using IoT.Rest.Infrastructure;
 using IoT.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
+using Prometheus.DotNetRuntime;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddSerilogLogging();
 builder.AddMetrics();
+DotNetRuntimeStatsBuilder.Default().StartCollecting();
 builder.AddTracing();
 builder.Services.AddControllers();
 builder.Services.AddApiServices();
