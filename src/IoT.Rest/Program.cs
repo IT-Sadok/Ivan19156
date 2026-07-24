@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddSerilogLogging();
 builder.AddMetrics();
+builder.AddTracing();
 builder.Services.AddControllers();
 builder.Services.AddApiServices();
 builder.Services.AddOpenApi();
