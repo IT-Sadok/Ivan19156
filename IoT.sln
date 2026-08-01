@@ -32,6 +32,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github/workflows/", ".gith
 		cd.yml = cd.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TelemetryService", "TelemetryService", "{C1D2E3F4-A5B6-7890-CDEF-123456789ABC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Rest", "src\services\TelemetryService\TelemetryService.Rest\TelemetryService.Rest.csproj", "{D1E2F3A4-B5C6-7890-DEFA-234567890BCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Application", "src\services\TelemetryService\TelemetryService.Application\TelemetryService.Application.csproj", "{E1F2A3B4-C5D6-7890-EFAB-345678901CDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Domain", "src\services\TelemetryService\TelemetryService.Domain\TelemetryService.Domain.csproj", "{F1A2B3C4-D5E6-7890-FABC-456789012DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Infrastructure", "src\services\TelemetryService\TelemetryService.Infrastructure\TelemetryService.Infrastructure.csproj", "{A1B2C3D4-E5F6-7890-ABCD-567890123EFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Interfaces", "src\services\TelemetryService\TelemetryService.Interfaces\TelemetryService.Interfaces.csproj", "{B2C3D4E5-F6A7-8901-BCDE-678901234FAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,5 +163,10 @@ Global
 		{DD28A379-DBCD-4BFF-A03A-E2F6377519B5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{D16CE495-50F4-4E54-BA43-1EC20180FDCD} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{3B798F8A-58CC-4E7E-BBD7-3B4729F6E655} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{D1E2F3A4-B5C6-7890-DEFA-234567890BCD} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {E1F2A3B4-C5D6-7890-EFAB-345678901CDE} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {F1A2B3C4-D5E6-7890-FABC-456789012DEF} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {A1B2C3D4-E5F6-7890-ABCD-567890123EFA} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {B2C3D4E5-F6A7-8901-BCDE-678901234FAB} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
 	EndGlobalSection
 EndGlobal
