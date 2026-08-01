@@ -1,5 +1,5 @@
 using IoT.Application.Queries.Alerts.GetAlerts;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

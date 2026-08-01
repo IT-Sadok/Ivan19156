@@ -1,6 +1,6 @@
 // IoT.Application/Commands/Devices/GenerateApiKey/GenerateApiKeyCommandHandler.cs
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 

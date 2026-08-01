@@ -2,7 +2,7 @@ using IoT.Application.Common.Mappings;
 using IoT.Contracts.Devices;
 using IoT.Domain.Enums;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 using Microsoft.EntityFrameworkCore;

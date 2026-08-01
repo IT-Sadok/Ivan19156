@@ -4,7 +4,7 @@ using IoT.Application.Common.Mappings;
 using IoT.Application.Queries.Maintenance.GetMaintenanceRecords;
 using IoT.Contracts.Maintenance;
 using IoT.Domain.Constants;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

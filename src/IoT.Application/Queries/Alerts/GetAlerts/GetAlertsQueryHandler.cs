@@ -1,6 +1,6 @@
 using IoT.Contracts.Alerts;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 using Microsoft.EntityFrameworkCore;
 

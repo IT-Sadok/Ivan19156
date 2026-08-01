@@ -1,6 +1,6 @@
 using IoT.Application.Commands.Telemetry.ProcessTelemetry;
 using IoT.Contracts.Telemetry;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Rest.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 

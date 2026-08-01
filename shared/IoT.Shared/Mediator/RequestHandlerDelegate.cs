@@ -1,3 +1,3 @@
-namespace IoT.Interfaces.Mediator;
+namespace IoT.Shared.Mediator;
 
 public delegate Task<TResponse> RequestHandlerDelegate<TResponse>();

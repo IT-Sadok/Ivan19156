@@ -1,5 +1,5 @@
 // LoggingBehavior.cs
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 

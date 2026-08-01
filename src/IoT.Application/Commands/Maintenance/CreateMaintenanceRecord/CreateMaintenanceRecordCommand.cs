@@ -1,5 +1,5 @@
 using IoT.Contracts.Maintenance;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 
 namespace IoT.Application.Commands.Maintenance.CreateMaintenanceRecord;

@@ -1,4 +1,4 @@
-namespace IoT.Interfaces.Mediator;
+namespace IoT.Shared.Mediator;
 
 public interface IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

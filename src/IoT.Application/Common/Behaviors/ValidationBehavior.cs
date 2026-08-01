@@ -1,6 +1,6 @@
 // ValidationBehavior.cs
 using FluentValidation;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 
 namespace IoT.Application.Common.Behaviors;
 

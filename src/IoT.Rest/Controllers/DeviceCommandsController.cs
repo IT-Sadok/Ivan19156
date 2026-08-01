@@ -3,7 +3,7 @@ using IoT.Application.Common.Mappings;
 using IoT.Application.Queries.DeviceCommands.GetDeviceCommands;
 using IoT.Contracts.DeviceCommands;
 using IoT.Domain.Constants;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

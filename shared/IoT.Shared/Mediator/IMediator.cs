@@ -1,7 +1,4 @@
-// IoT.Interfaces/IMediator.cs
-using IoT.Interfaces.Mediator;
-
-namespace IoT.Interfaces.Mediator;
+namespace IoT.Shared.Mediator;
 
 public interface IMediator
 {

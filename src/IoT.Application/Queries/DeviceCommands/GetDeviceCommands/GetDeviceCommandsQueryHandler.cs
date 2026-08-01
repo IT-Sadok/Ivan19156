@@ -1,7 +1,7 @@
 using IoT.Application.Common.Mappings;
 using IoT.Contracts.DeviceCommands;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 

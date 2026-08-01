@@ -1,6 +1,6 @@
 using IoT.Application.Queries.Assistant.ProcessAssistantQuery;
 using IoT.Infrastructure.Services;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 using Microsoft.Extensions.Options;

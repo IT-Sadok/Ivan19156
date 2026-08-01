@@ -1,7 +1,7 @@
 using IoT.Application.Queries.Assistant.ProcessAssistantQuery;
 using IoT.Contracts.Assistant;
 using IoT.Domain.Constants;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

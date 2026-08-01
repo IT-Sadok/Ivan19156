@@ -1,7 +1,7 @@
 using IoT.Application.Common.Mappings;
 using IoT.Contracts.Alerts;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 
 namespace IoT.Application.Commands.Alerts.CreateRule;

@@ -1,8 +1,6 @@
-// IoT.Api/Extensions/MediatorExtensions.cs
 using System.Reflection;
 using FluentValidation;
-using IoT.Application.Common.Mediator;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Application.Common.Behaviors;
 using IoT.Contracts.Devices;
 

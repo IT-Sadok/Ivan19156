@@ -5,7 +5,7 @@ using IoT.Application.Queries.Devices.GetDeviceById;
 using IoT.Application.Queries.Devices.GetDevices;
 using IoT.Contracts.Devices;
 using IoT.Domain.Constants;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

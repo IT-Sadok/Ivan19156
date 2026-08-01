@@ -1,5 +1,5 @@
 using IoT.Domain.Events;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 using MassTransit;
 

@@ -2,7 +2,7 @@ using IoT.Application.Common.Mappings;
 using IoT.Contracts.Events;
 using IoT.Contracts.Maintenance;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 using MassTransit;

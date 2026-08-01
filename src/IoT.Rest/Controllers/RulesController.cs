@@ -3,7 +3,7 @@ using IoT.Application.Commands.Alerts.CreateRule;
 using IoT.Application.Queries.Alerts.GetRules;
 using IoT.Contracts.Alerts;
 using IoT.Domain.Constants;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
