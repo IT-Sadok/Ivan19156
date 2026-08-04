@@ -35,7 +35,6 @@ public static class InfrastructureServiceExtensions
 
         services.AddMassTransit(x =>
 {
-    x.AddConsumer<TelemetryConsumer>();
     x.AddConsumer<RulesEngineConsumer>();
     x.AddConsumer<EmbeddingGenerationConsumer>();
 
@@ -47,8 +46,7 @@ public static class InfrastructureServiceExtensions
 
         rider.AddProducer<TelemetryReceivedEvent>(kafkaOptions.Topics.Telemetry);
         rider.AddProducer<MaintenanceRecordCreatedEvent>(kafkaOptions.Topics.EmbeddingGeneration);
-
-        rider.AddConsumer<TelemetryConsumer>();
+        
         rider.AddConsumer<RulesEngineConsumer>();
         rider.AddConsumer<EmbeddingGenerationConsumer>();
 
@@ -82,7 +80,6 @@ public static class InfrastructureServiceExtensions
                 e =>
                 {
                     e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
-                    e.ConfigureConsumer<TelemetryConsumer>(context);
                 });
 
             k.TopicEndpoint<TelemetryReceivedEvent>(
@@ -144,8 +141,7 @@ public static class InfrastructureServiceExtensions
         {
             rider.AddProducer<TelemetryReceivedEvent>(kafkaOptions.Topics.Telemetry);
             rider.AddProducer<MaintenanceRecordCreatedEvent>(kafkaOptions.Topics.EmbeddingGeneration);
-
-            rider.AddConsumer<TelemetryConsumer>();
+            
             rider.AddConsumer<RulesEngineConsumer>();
             rider.AddConsumer<EmbeddingGenerationConsumer>();
 
@@ -180,7 +176,6 @@ public static class InfrastructureServiceExtensions
                     e =>
                     {
                         e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
-                        e.ConfigureConsumer<TelemetryConsumer>(context);
                     });
 
                 k.TopicEndpoint<TelemetryReceivedEvent>(
