@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.4" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.16.17" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TelemetryService.Application\TelemetryService.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\shared\IoT.Shared\IoT.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\shared\IoT.Contracts\IoT.Contracts.csproj" />
+    <ProjectReference Include="..\TelemetryService.Infrastructure\TelemetryService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
