@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telemetry-service-config
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  Kafka__BootstrapServers: "your-eventhub.servicebus.windows.net:9093"
+  Kafka__Topics__Telemetry: "telemetry-received"
+  Kafka__Topics__TelemetryStored: "telemetry-stored"
+  Kafka__ConsumerGroups__TelemetryProcessor: "telemetry-processor"
