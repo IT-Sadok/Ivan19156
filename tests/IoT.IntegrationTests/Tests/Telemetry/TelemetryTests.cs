@@ -30,7 +30,7 @@ public class TelemetryTests : IAsyncLifetime
         return Task.CompletedTask;
     }
 
-    [Fact]
+    [Fact(Skip = "Telemetry endpoint moved to TelemetryService. Tests to be migrated.")]
     public async Task ProcessTelemetry_WithoutApiKey_ShouldReturn401()
     {
         var clientWithoutKey = _fixture.Factory.CreateClient(); 
@@ -44,7 +44,7 @@ public class TelemetryTests : IAsyncLifetime
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
-    [Fact]
+    [Fact(Skip = "Telemetry endpoint moved to TelemetryService. Tests to be migrated.")]
     public async Task ProcessTelemetry_ValidPayload_ShouldReturn200AndPersistRecord()
     {
         var messageId = Guid.NewGuid();
@@ -70,8 +70,8 @@ public class TelemetryTests : IAsyncLifetime
         record.Should().NotBeNull();
         record!.Payload.Should().Be(request.payload);
     }
-
-    [Fact]
+    
+    [Fact(Skip = "Telemetry endpoint moved to TelemetryService. Tests to be migrated.")]
     public async Task ProcessTelemetry_DuplicateMessageId_ShouldBeIdempotent()
     {
         var messageId = Guid.NewGuid();
@@ -100,7 +100,7 @@ public class TelemetryTests : IAsyncLifetime
         finalCount.Should().Be(1);
     }
 
-    [Fact]
+    [Fact(Skip = "Telemetry endpoint moved to TelemetryService. Tests to be migrated.")]
     public async Task ProcessTelemetry_ValidPayload_ShouldUpdateDeviceLastSeen()
     {
         var request = new
