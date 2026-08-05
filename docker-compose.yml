@@ -98,6 +98,24 @@ services:
       - "4318:4318"    # OTLP HTTP
     environment:
       - COLLECTOR_OTLP_ENABLED=true
+
+  telemetry-service:
+    build:
+      context: .
+      dockerfile: src/services/TelemetryService/Dockerfile
+    container_name: iot_telemetry_service
+    ports:
+      - "5001:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=iot_db;Username=iot_user;Password=iot_password"
+      Kafka__BootstrapServers: "kafka:29092"
+      Kafka__Topics__Telemetry: "telemetry-received"
+      Kafka__Topics__TelemetryStored: "telemetry-stored"
+      Kafka__ConsumerGroups__TelemetryProcessor: "telemetry-processor"
+    depends_on:
+      - postgres
+      - kafka
 volumes:
   postgres_data:
   kafka_data:

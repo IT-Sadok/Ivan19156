@@ -41,6 +41,7 @@ public class TelemetryDbContext : DbContext
             // TODO: Remove when Gateway handles API key validation
             entity.ToTable("DeviceApiKeys", "public"); 
             entity.HasKey(k => k.Id);
+            entity.ToTable(tb => tb.ExcludeFromMigrations());
         });
     }
 

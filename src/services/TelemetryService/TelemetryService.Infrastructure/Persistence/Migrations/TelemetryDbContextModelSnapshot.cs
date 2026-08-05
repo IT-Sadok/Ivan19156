@@ -54,7 +54,10 @@ namespace TelemetryService.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeviceApiKeys", "public");
+                    b.ToTable("DeviceApiKeys", "public", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("TelemetryService.Domain.Entities.TelemetryRecord", b =>

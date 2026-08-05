@@ -12,8 +12,8 @@ using TelemetryService.Infrastructure.Persistence;
 namespace TelemetryService.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TelemetryDbContext))]
-    [Migration("20260804071424_InitialTelemetry")]
-    partial class InitialTelemetry
+    [Migration("20260805125610_InitiaTelemetry")]
+    partial class InitiaTelemetry
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,10 @@ namespace TelemetryService.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeviceApiKeys", "public");
+                    b.ToTable("DeviceApiKeys", "public", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("TelemetryService.Domain.Entities.TelemetryRecord", b =>
