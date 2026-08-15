@@ -13,7 +13,7 @@ public class TelemetryRepository : BaseRepository<TelemetryRecord>, ITelemetryRe
     public async Task<IEnumerable<TelemetryRecord>> GetByDeviceIdAsync(
         Guid deviceId,
         CancellationToken ct = default)
-        => await _dbSet
+        => await DbSet
             .Where(t => t.DeviceId == DeviceId.From(deviceId))
             .OrderByDescending(t => t.ReceivedAt)
             .ToListAsync(ct);
@@ -22,7 +22,7 @@ public class TelemetryRepository : BaseRepository<TelemetryRecord>, ITelemetryRe
         Guid deviceId,
         Guid messageId,
         CancellationToken ct = default)
-        => await _dbSet.AnyAsync(t =>
+        => await DbSet.AnyAsync(t =>
             t.DeviceId == DeviceId.From(deviceId) &&
             t.MessageId == messageId, ct);
 }
