@@ -23,7 +23,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddIdentityServices();
 builder.Services.AddJwtAuthentication(builder.Configuration);
-builder.Services.AddSingleton<IMediator, Mediator>();
+builder.Services.AddMediator(typeof(RegisterCommandHandler).Assembly);
 builder.Services.AddSwagger();
 builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
