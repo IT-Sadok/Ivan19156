@@ -8,7 +8,7 @@ public static class MediatorExtensions
 {
     public static IServiceCollection AddMediator(this IServiceCollection services)
     {
-        services.AddScoped<IMediator, Mediator>();
+        services.AddSingleton<IMediator, Mediator>();
         services.AddScoped<
         IRequestHandler<ProcessTelemetryCommand, Result<bool>>,
             ProcessTelemetryCommandHandler>();
