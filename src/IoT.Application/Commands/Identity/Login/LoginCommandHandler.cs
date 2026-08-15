@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using IoT.Contracts.Identity;
 using IoT.Domain.Entities;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +22,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
         _config = config;
     }
 
-    public async Task<Result<AuthResponse>> Handle(
+    public async Task<Result<AuthResponse>> ExecuteAsync(
         LoginCommand request,
         CancellationToken ct = default)
     {

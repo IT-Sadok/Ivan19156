@@ -6,6 +6,7 @@ using IoT.Rest.Extensions;
 using IoT.Rest.Hubs;
 using IoT.Rest.Infrastructure;
 using IoT.Infrastructure.Seeders;
+using IoT.Shared.Mediator;
 using Microsoft.EntityFrameworkCore;
 using Prometheus.DotNetRuntime;
 using Scalar.AspNetCore;

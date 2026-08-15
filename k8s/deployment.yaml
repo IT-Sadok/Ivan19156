@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: iot-api
-          image: iotregistryi.azurecr.io/iot-api:latest
+          image: iotregistryi.azurecr.io/iot-api:#{IMAGE_TAG}#
           ports:
             - containerPort: 8080
           envFrom:

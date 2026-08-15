@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\IoT.Contracts\IoT.Contracts.csproj" />
+    <ProjectReference Include="..\..\shared\IoT.Contracts\IoT.Contracts.csproj" />
     <ProjectReference Include="..\IoT.Domain\IoT.Domain.csproj" />
   </ItemGroup>
 

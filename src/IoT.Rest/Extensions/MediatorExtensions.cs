@@ -1,9 +1,6 @@
-// IoT.Api/Extensions/MediatorExtensions.cs
 using System.Reflection;
 using FluentValidation;
-using IoT.Application.Common.Mediator;
-using IoT.Interfaces.Mediator;
-using IoT.Application.Common.Behaviors;
+using IoT.Shared.Mediator;
 using IoT.Contracts.Devices;
 
 namespace IoT.Rest.Extensions;
@@ -14,9 +11,8 @@ public static class MediatorExtensions
         this IServiceCollection services,
         Assembly applicationAssembly)
     {
-        services.AddScoped<IMediator, Mediator>();
+        services.AddSingleton<IMediator, Mediator>();
 
-       
         var handlerTypes = applicationAssembly
             .GetTypes()
             .Where(t => t.GetInterfaces().Any(i =>
@@ -32,15 +28,6 @@ public static class MediatorExtensions
             services.AddScoped(interfaceType, handlerType);
         }
 
-       
-        services.AddScoped(
-            typeof(IPipelineBehavior<,>),
-            typeof(LoggingBehavior<,>));
-
-        services.AddScoped(
-            typeof(IPipelineBehavior<,>),
-            typeof(ValidationBehavior<,>));
- 
         services.AddValidatorsFromAssembly(applicationAssembly);
         services.AddValidatorsFromAssembly(typeof(DeviceResponse).Assembly);
 

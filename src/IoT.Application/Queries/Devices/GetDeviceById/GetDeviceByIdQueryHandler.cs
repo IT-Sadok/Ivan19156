@@ -1,7 +1,7 @@
 using IoT.Application.Common.Mappings;
 using IoT.Contracts.Devices;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 
@@ -19,7 +19,7 @@ public class GetDeviceByIdQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<DeviceResponse>> Handle(
+    public async Task<Result<DeviceResponse>> ExecuteAsync(
         GetDeviceByIdQuery request,
         CancellationToken ct = default)
     {

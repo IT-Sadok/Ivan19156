@@ -2,7 +2,7 @@ using IoT.Application.Common.Mappings;
 using IoT.Contracts.Devices;
 using IoT.Domain.Enums;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +22,7 @@ public class GetDevicesQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<PagedResult<DeviceResponse>>> Handle(
+    public async Task<Result<PagedResult<DeviceResponse>>> ExecuteAsync(
         GetDevicesQuery request,
         CancellationToken ct = default)
     {

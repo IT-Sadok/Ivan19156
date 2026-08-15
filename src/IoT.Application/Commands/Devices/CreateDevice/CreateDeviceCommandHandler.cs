@@ -3,7 +3,7 @@ using IoT.Contracts.Devices;
 using IoT.Domain.Entities;
 using IoT.Domain.Enums;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 
 namespace IoT.Application.Commands.Devices.CreateDevice;
@@ -16,7 +16,7 @@ public class CreateDeviceCommandHandler
     public CreateDeviceCommandHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<DeviceResponse>> Handle(
+    public async Task<Result<DeviceResponse>> ExecuteAsync(
         CreateDeviceCommand request,
         CancellationToken ct = default)
     {

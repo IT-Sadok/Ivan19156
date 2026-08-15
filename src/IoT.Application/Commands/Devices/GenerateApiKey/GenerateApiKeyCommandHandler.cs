@@ -1,6 +1,6 @@
 // IoT.Application/Commands/Devices/GenerateApiKey/GenerateApiKeyCommandHandler.cs
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 
@@ -20,7 +20,7 @@ public class GenerateApiKeyCommandHandler
         _apiKeyService = apiKeyService;
     }
 
-    public async Task<Result<string>> Handle(
+    public async Task<Result<string>> ExecuteAsync(
         GenerateApiKeyCommand request,
         CancellationToken ct = default)
     {

@@ -2,7 +2,7 @@ using IoT.Application.Common.Mappings;
 using IoT.Contracts.Events;
 using IoT.Contracts.Maintenance;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Interfaces.Services;
 using IoT.Shared.Common;
 using MassTransit;
@@ -14,7 +14,7 @@ public class CreateMaintenanceRecordCommandHandler(
     ITopicProducer<MaintenanceRecordCreatedEvent> producer)
     : IRequestHandler<CreateMaintenanceRecordCommand, Result<MaintenanceRecordResponse>>
 {
-    public async Task<Result<MaintenanceRecordResponse>> Handle(
+    public async Task<Result<MaintenanceRecordResponse>> ExecuteAsync(
         CreateMaintenanceRecordCommand request,
         CancellationToken ct)
     {

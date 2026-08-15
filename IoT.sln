@@ -6,15 +6,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 		.dockerignore = .dockerignore
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Application", "src\IoT.Application\IoT.Application.csproj", "{1EFB7765-DAF4-459D-85B7-8BCA3DA9789A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Contracts", "src\IoT.Contracts\IoT.Contracts.csproj", "{B4D6F8A2-C3E5-4791-BCDE-F12345678901}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Contracts", "shared\IoT.Contracts\IoT.Contracts.csproj", "{B4D6F8A2-C3E5-4791-BCDE-F12345678901}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Infrastructure", "src\IoT.Infrastructure\IoT.Infrastructure.csproj", "{2F8C95B8-C698-42AD-8047-E98316F1F6E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Interfaces", "src\IoT.Interfaces\IoT.Interfaces.csproj", "{6CD925FB-0496-4D98-85EA-5DFCCA174CB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Shared", "src\IoT.Shared\IoT.Shared.csproj", "{FA08219D-B02A-4DF6-93D2-E36BE204AE94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Shared", "shared\IoT.Shared\IoT.Shared.csproj", "{FA08219D-B02A-4DF6-93D2-E36BE204AE94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT.Domain", "src\IoT.Domain\IoT.Domain.csproj", "{DD28A379-DBCD-4BFF-A03A-E2F6377519B5}"
 EndProject
@@ -29,6 +31,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github/workflows/", ".gith
 		ci.yml = ci.yml
 		cd.yml = cd.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TelemetryService", "TelemetryService", "{C1D2E3F4-A5B6-7890-CDEF-123456789ABC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Rest", "src\services\TelemetryService\TelemetryService.Rest\TelemetryService.Rest.csproj", "{D1E2F3A4-B5C6-7890-DEFA-234567890BCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Application", "src\services\TelemetryService\TelemetryService.Application\TelemetryService.Application.csproj", "{E1F2A3B4-C5D6-7890-EFAB-345678901CDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Domain", "src\services\TelemetryService\TelemetryService.Domain\TelemetryService.Domain.csproj", "{F1A2B3C4-D5E6-7890-FABC-456789012DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Infrastructure", "src\services\TelemetryService\TelemetryService.Infrastructure\TelemetryService.Infrastructure.csproj", "{A1B2C3D4-E5F6-7890-ABCD-567890123EFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.Interfaces", "src\services\TelemetryService\TelemetryService.Interfaces\TelemetryService.Interfaces.csproj", "{B2C3D4E5-F6A7-8901-BCDE-678901234FAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelemetryService.IntegrationTests", "tests\TelemetryService.IntegrationTests\TelemetryService.IntegrationTests.csproj", "{C1D2E3F4-A5B6-7890-CDEF-987654321ABC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,12 +158,18 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1EFB7765-DAF4-459D-85B7-8BCA3DA9789A} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{B4D6F8A2-C3E5-4791-BCDE-F12345678901} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{B4D6F8A2-C3E5-4791-BCDE-F12345678901} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 		{2F8C95B8-C698-42AD-8047-E98316F1F6E2} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{6CD925FB-0496-4D98-85EA-5DFCCA174CB6} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{FA08219D-B02A-4DF6-93D2-E36BE204AE94} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{FA08219D-B02A-4DF6-93D2-E36BE204AE94} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 		{DD28A379-DBCD-4BFF-A03A-E2F6377519B5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{D16CE495-50F4-4E54-BA43-1EC20180FDCD} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{3B798F8A-58CC-4E7E-BBD7-3B4729F6E655} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{D1E2F3A4-B5C6-7890-DEFA-234567890BCD} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {E1F2A3B4-C5D6-7890-EFAB-345678901CDE} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {F1A2B3C4-D5E6-7890-FABC-456789012DEF} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {A1B2C3D4-E5F6-7890-ABCD-567890123EFA} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {B2C3D4E5-F6A7-8901-BCDE-678901234FAB} = {C1D2E3F4-A5B6-7890-CDEF-123456789ABC}
+        {C1D2E3F4-A5B6-7890-CDEF-987654321ABC} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

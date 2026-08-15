@@ -1,5 +1,5 @@
 using IoT.Domain.Entities;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,7 +12,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<st
     public RegisterCommandHandler(UserManager<User> userManager)
         => _userManager = userManager;
 
-    public async Task<Result<string>> Handle(
+    public async Task<Result<string>> ExecuteAsync(
         RegisterCommand request,
         CancellationToken ct = default)
     {

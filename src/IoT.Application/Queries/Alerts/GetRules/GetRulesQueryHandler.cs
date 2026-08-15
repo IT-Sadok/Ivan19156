@@ -1,7 +1,7 @@
 // IoT.Application/Queries/Alerts/GetRules/GetRulesQueryHandler.cs
 using IoT.Contracts.Alerts;
 using IoT.Interfaces;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +15,7 @@ public class GetRulesQueryHandler
     public GetRulesQueryHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<IEnumerable<RuleResponse>>> Handle(
+    public async Task<Result<IEnumerable<RuleResponse>>> ExecuteAsync(
         GetRulesQuery request,
         CancellationToken ct = default)
     {

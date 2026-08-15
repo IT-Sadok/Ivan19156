@@ -1,5 +1,5 @@
 using IoT.Contracts.DeviceCommands;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Mediator;
 using IoT.Shared.Common;
 
 namespace IoT.Application.Queries.DeviceCommands.GetDeviceCommands;

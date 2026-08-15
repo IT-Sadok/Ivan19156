@@ -1,6 +1,9 @@
+using IoT.Application.Commands.Identity.Login;
+using IoT.Application.Commands.Identity.Register;
 using IoT.Application.Common.Mappings;
 using IoT.Contracts.Identity;
-using IoT.Interfaces.Mediator;
+using IoT.Shared.Common;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IoT.Rest.Controllers;
@@ -15,9 +18,11 @@ public class AuthController : BaseController
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-        => HandleResult(await _mediator.Send(request.ToCommand()));
+        => HandleResult(await _mediator.SendAsync<RegisterCommand, Result<string>>(
+            request.ToCommand()));
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
-        => HandleResult(await _mediator.Send(request.ToCommand()));
+        => HandleResult(await _mediator.SendAsync<LoginCommand, Result<AuthResponse>>(
+            request.ToCommand()));
 }
