@@ -1,8 +1,8 @@
-// IoT.Rest/Controllers/RulesController.cs
 using IoT.Application.Commands.Alerts.CreateRule;
 using IoT.Application.Queries.Alerts.GetRules;
 using IoT.Contracts.Alerts;
 using IoT.Domain.Constants;
+using IoT.Shared.Common;
 using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,8 @@ public class RulesController : BaseController
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
-        => HandleResult(await _mediator.Send(new GetRulesQuery()));
+        => HandleResult(await _mediator.SendAsync<GetRulesQuery, Result<IEnumerable<RuleResponse>>>(
+            new GetRulesQuery()));
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPost]
@@ -36,6 +37,6 @@ public class RulesController : BaseController
             request.Value,
             request.Action,
             userId);
-        return HandleResult(await _mediator.Send(command));
+        return HandleResult(await _mediator.SendAsync<CreateRuleCommand, Result<RuleResponse>>(command));
     }
 }

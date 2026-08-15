@@ -12,7 +12,7 @@ public class DeleteDeviceCommandHandler
     public DeleteDeviceCommandHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<bool>> Handle(
+    public async Task<Result<bool>> ExecuteAsync(
         DeleteDeviceCommand request,
         CancellationToken ct = default)
     {

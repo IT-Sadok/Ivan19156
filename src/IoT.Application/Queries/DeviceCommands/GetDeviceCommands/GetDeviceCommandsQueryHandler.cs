@@ -19,7 +19,7 @@ public class GetDeviceCommandsQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<IEnumerable<DeviceCommandResponse>>> Handle(
+    public async Task<Result<IEnumerable<DeviceCommandResponse>>> ExecuteAsync(
         GetDeviceCommandsQuery request,
         CancellationToken ct = default)
     {

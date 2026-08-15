@@ -10,7 +10,7 @@ public class ProcessAssistantQueryHandler(
     IoTContextBuilder contextBuilder,
     IOptions<AzureAIOptions> options) : IRequestHandler<ProcessAssistantQuery, Result<string>>
 {
-    public async Task<Result<string>> Handle(ProcessAssistantQuery request, CancellationToken ct)
+    public async Task<Result<string>> ExecuteAsync(ProcessAssistantQuery request, CancellationToken ct)
     {
         string? context = null;
 

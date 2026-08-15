@@ -22,7 +22,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
         _config = config;
     }
 
-    public async Task<Result<AuthResponse>> Handle(
+    public async Task<Result<AuthResponse>> ExecuteAsync(
         LoginCommand request,
         CancellationToken ct = default)
     {

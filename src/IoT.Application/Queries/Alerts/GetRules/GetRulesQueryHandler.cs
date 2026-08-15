@@ -15,7 +15,7 @@ public class GetRulesQueryHandler
     public GetRulesQueryHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<IEnumerable<RuleResponse>>> Handle(
+    public async Task<Result<IEnumerable<RuleResponse>>> ExecuteAsync(
         GetRulesQuery request,
         CancellationToken ct = default)
     {

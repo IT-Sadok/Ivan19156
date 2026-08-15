@@ -9,7 +9,7 @@ namespace IoT.Application.Queries.Maintenance.GetMaintenanceRecords;
 public class GetMaintenanceRecordsQueryHandler(IUnitOfWork unitOfWork)
     : IRequestHandler<GetMaintenanceRecordsQuery, Result<IEnumerable<MaintenanceRecordResponse>>>
 {
-    public async Task<Result<IEnumerable<MaintenanceRecordResponse>>> Handle(
+    public async Task<Result<IEnumerable<MaintenanceRecordResponse>>> ExecuteAsync(
         GetMaintenanceRecordsQuery request,
         CancellationToken ct)
     {

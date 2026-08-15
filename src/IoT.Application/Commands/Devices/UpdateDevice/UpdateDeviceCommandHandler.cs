@@ -14,7 +14,7 @@ public class UpdateDeviceCommandHandler
     public UpdateDeviceCommandHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<DeviceResponse>> Handle(
+    public async Task<Result<DeviceResponse>> ExecuteAsync(
         UpdateDeviceCommand request,
         CancellationToken ct = default)
     {

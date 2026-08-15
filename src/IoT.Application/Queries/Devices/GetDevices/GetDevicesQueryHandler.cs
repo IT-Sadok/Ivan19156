@@ -22,7 +22,7 @@ public class GetDevicesQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<PagedResult<DeviceResponse>>> Handle(
+    public async Task<Result<PagedResult<DeviceResponse>>> ExecuteAsync(
         GetDevicesQuery request,
         CancellationToken ct = default)
     {

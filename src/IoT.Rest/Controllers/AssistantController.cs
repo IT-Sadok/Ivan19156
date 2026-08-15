@@ -1,6 +1,6 @@
 using IoT.Application.Queries.Assistant.ProcessAssistantQuery;
 using IoT.Contracts.Assistant;
-using IoT.Domain.Constants;
+using IoT.Shared.Common;
 using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,8 @@ public class AssistantController(IMediator mediator) : BaseController
         [FromBody] AssistantQueryRequest request,
         CancellationToken ct)
     {
-        var result = await mediator.Send(new ProcessAssistantQuery(request.Query), ct);
+        var result = await mediator.SendAsync<ProcessAssistantQuery, Result<string>>(
+            new ProcessAssistantQuery(request.Query), ct);
         return result.IsSuccess
             ? Ok(new AssistantQueryResponse(result.Value))
             : BadRequest(result.Error);

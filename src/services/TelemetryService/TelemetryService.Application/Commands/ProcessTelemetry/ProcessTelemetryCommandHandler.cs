@@ -14,7 +14,7 @@ public class ProcessTelemetryCommandHandler
     public ProcessTelemetryCommandHandler(IPublishEndpoint publishEndpoint)
         => _publishEndpoint = publishEndpoint;
 
-    public async Task<Result<bool>> Handle(
+    public async Task<Result<bool>> ExecuteAsync(
         ProcessTelemetryCommand request,
         CancellationToken ct = default)
     {

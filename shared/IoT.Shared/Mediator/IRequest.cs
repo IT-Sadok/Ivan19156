@@ -1,3 +1,3 @@
 namespace IoT.Shared.Mediator;
 
-public interface IRequest<TResponse> { }
+public interface IRequest<TResult> { }

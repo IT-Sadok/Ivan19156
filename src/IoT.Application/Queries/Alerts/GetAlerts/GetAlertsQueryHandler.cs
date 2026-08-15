@@ -14,7 +14,7 @@ public class GetAlertsQueryHandler
     public GetAlertsQueryHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<IEnumerable<AlertResponse>>> Handle(
+    public async Task<Result<IEnumerable<AlertResponse>>> ExecuteAsync(
         GetAlertsQuery request,
         CancellationToken ct = default)
     {

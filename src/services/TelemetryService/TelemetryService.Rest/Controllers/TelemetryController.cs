@@ -1,5 +1,6 @@
-using IoT.Shared.Mediator;
 using IoT.Contracts.Telemetry;
+using IoT.Shared.Common;
+using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Mvc;
 using TelemetryService.Application.Commands.ProcessTelemetry;
 using TelemetryService.Rest.Infrastructure;
@@ -20,6 +21,6 @@ public class TelemetryController : BaseController
     {
         var deviceId = (Guid)HttpContext.Items["DeviceId"]!;
         var command = new ProcessTelemetryCommand(deviceId, request.MessageId, request.Payload);
-        return HandleResult(await _mediator.Send(command));
+        return HandleResult(await _mediator.SendAsync<ProcessTelemetryCommand, Result<bool>>(command));
     }
 }

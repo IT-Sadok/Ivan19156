@@ -14,7 +14,7 @@ public class CreateMaintenanceRecordCommandHandler(
     ITopicProducer<MaintenanceRecordCreatedEvent> producer)
     : IRequestHandler<CreateMaintenanceRecordCommand, Result<MaintenanceRecordResponse>>
 {
-    public async Task<Result<MaintenanceRecordResponse>> Handle(
+    public async Task<Result<MaintenanceRecordResponse>> ExecuteAsync(
         CreateMaintenanceRecordCommand request,
         CancellationToken ct)
     {

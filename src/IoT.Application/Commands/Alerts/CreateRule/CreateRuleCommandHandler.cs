@@ -14,7 +14,7 @@ public class CreateRuleCommandHandler
     public CreateRuleCommandHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<RuleResponse>> Handle(
+    public async Task<Result<RuleResponse>> ExecuteAsync(
         CreateRuleCommand request,
         CancellationToken ct = default)
     {

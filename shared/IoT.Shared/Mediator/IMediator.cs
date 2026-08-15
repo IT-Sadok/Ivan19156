@@ -2,5 +2,8 @@ namespace IoT.Shared.Mediator;
 
 public interface IMediator
 {
-    Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken ct = default);
+    Task<TResult> SendAsync<TRequest, TResult>(
+        TRequest request,
+        CancellationToken ct = default)
+        where TRequest : IRequest<TResult>;
 }

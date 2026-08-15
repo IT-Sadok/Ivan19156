@@ -16,7 +16,7 @@ public class CreateDeviceCommandHandler
     public CreateDeviceCommandHandler(IUnitOfWork unitOfWork)
         => _unitOfWork = unitOfWork;
 
-    public async Task<Result<DeviceResponse>> Handle(
+    public async Task<Result<DeviceResponse>> ExecuteAsync(
         CreateDeviceCommand request,
         CancellationToken ct = default)
     {

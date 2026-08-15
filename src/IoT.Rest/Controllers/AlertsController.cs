@@ -1,4 +1,6 @@
 using IoT.Application.Queries.Alerts.GetAlerts;
+using IoT.Contracts.Alerts;
+using IoT.Shared.Common;
 using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,5 +18,6 @@ public class AlertsController : BaseController
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] Guid? deviceId = null)
-        => HandleResult(await _mediator.Send(new GetAlertsQuery(deviceId)));
+        => HandleResult(await _mediator.SendAsync<GetAlertsQuery, Result<IEnumerable<AlertResponse>>>(
+            new GetAlertsQuery(deviceId)));
 }

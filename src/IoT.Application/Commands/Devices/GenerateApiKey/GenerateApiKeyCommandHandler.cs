@@ -20,7 +20,7 @@ public class GenerateApiKeyCommandHandler
         _apiKeyService = apiKeyService;
     }
 
-    public async Task<Result<string>> Handle(
+    public async Task<Result<string>> ExecuteAsync(
         GenerateApiKeyCommand request,
         CancellationToken ct = default)
     {

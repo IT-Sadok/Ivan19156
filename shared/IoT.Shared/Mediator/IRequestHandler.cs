@@ -1,7 +1,7 @@
 namespace IoT.Shared.Mediator;
 
-public interface IRequestHandler<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+public interface IRequestHandler<TRequest, TResult>
+    where TRequest : IRequest<TResult>
 {
-    Task<TResponse> Handle(TRequest request, CancellationToken ct = default);
+    Task<TResult> ExecuteAsync(TRequest request, CancellationToken ct = default);
 }

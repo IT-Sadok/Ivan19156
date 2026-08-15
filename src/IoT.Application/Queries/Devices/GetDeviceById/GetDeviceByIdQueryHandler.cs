@@ -19,7 +19,7 @@ public class GetDeviceByIdQueryHandler
         _cache = cache;
     }
 
-    public async Task<Result<DeviceResponse>> Handle(
+    public async Task<Result<DeviceResponse>> ExecuteAsync(
         GetDeviceByIdQuery request,
         CancellationToken ct = default)
     {
