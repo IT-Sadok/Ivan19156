@@ -1,19 +1,13 @@
 name: CD
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types: [completed]
-    branches: [ main, dev ]
+  workflow_dispatch:
 
 jobs:
   build-and-push-monolith:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - uses: docker/login-action@v3
         with:
@@ -26,17 +20,12 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/iot-api:latest
-            ${{ secrets.ACR_LOGIN_SERVER }}/iot-api:${{ github.event.workflow_run.head_sha }}
+          tags: ${{ secrets.ACR_LOGIN_SERVER }}/iot-api:${{ github.sha }}
 
   build-and-push-telemetry:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - uses: docker/login-action@v3
         with:
@@ -49,17 +38,13 @@ jobs:
           context: .
           file: src/services/TelemetryService/Dockerfile
           push: true
-          tags: |
-            ${{ secrets.ACR_LOGIN_SERVER }}/telemetry-service:latest
-            ${{ secrets.ACR_LOGIN_SERVER }}/telemetry-service:${{ github.event.workflow_run.head_sha }}
+          tags: ${{ secrets.ACR_LOGIN_SERVER }}/telemetry-service:${{ github.sha }}
 
   deploy:
     needs: [build-and-push-monolith, build-and-push-telemetry]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - uses: azure/login@v1
         with:
@@ -70,13 +55,17 @@ jobs:
           resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
           cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
 
+      - name: Set image tags
+        run: |
+          sed -i 's|#{IMAGE_TAG}#|${{ github.sha }}|g' k8s/deployment.yaml
+          sed -i 's|#{IMAGE_TAG}#|${{ github.sha }}|g' k8s/telemetry/deployment.yaml
+
       - name: Deploy monolith
         run: |
           kubectl apply -f k8s/configmap.yaml
           kubectl apply -f k8s/redis.yaml
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
-          kubectl set image deployment/iot-api iot-api=${{ secrets.ACR_LOGIN_SERVER }}/iot-api:${{ github.event.workflow_run.head_sha }}
           kubectl rollout restart deployment/iot-api
 
       - name: Deploy telemetry service
@@ -84,5 +73,4 @@ jobs:
           kubectl apply -f k8s/telemetry/configmap.yaml
           kubectl apply -f k8s/telemetry/deployment.yaml
           kubectl apply -f k8s/telemetry/service.yaml
-          kubectl set image deployment/telemetry-service telemetry-service=${{ secrets.ACR_LOGIN_SERVER }}/telemetry-service:${{ github.event.workflow_run.head_sha }}
           kubectl rollout restart deployment/telemetry-service

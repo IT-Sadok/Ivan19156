@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: telemetry-service
-          image: iotregistryi.azurecr.io/telemetry-service:latest
+          image: iotregistryi.azurecr.io/telemetry-service:#{IMAGE_TAG}#
           ports:
             - containerPort: 8080
           envFrom:
