@@ -9,7 +9,15 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Ільків Іван\\\\RiderProjects\\\\IoT\" -Recurse -Directory)",
       "Bash(Select-Object FullName)",
       "Bash(Format-Table -AutoSize)",
-      "Bash(grep -r \"IConsumer\\\\|EventHandler\\\\|Handler\" ./src --include=\"*.cs\" ! -path \"*/obj/*\" ! -path \"*/bin/*\")"
+      "Bash(grep -r \"IConsumer\\\\|EventHandler\\\\|Handler\" ./src --include=\"*.cs\" ! -path \"*/obj/*\" ! -path \"*/bin/*\")",
+      "Bash(xargs grep -l \"DeviceType\\\\|DeviceAdminStatus\\\\|CommandStatus\\\\|AlertStatus\")",
+      "Bash(Get-Content *)",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Ільків Іван\\\\RiderProjects\\\\IoT\\\\src\\\\services\\\\DeviceService\\\\DeviceService.Rest\\\\Controllers\")",
+      "Bash(Out-Null)",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Ільків Іван\\\\RiderProjects\\\\IoT\\\\src\\\\services\\\\DeviceService\\\\DeviceService.Rest\\\\Hubs\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Ільків Іван\\\\RiderProjects\\\\IoT\\\\src\\\\services\\\\DeviceService\\\\DeviceService.Rest\\\\Infrastructure\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\Ільків Іван\\\\RiderProjects\\\\IoT\\\\src\\\\services\\\\DeviceService\\\\DeviceService.Rest\\\\Extensions\")",
+      "Bash(dotnet sln *)"
     ]
   }
 }

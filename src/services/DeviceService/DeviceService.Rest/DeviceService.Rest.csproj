@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>0f371ad4-8702-46c4-b8b9-e5b1ab0cde50</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Scalar.AspNetCore" Version="2.16.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DeviceService.Application\DeviceService.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\shared\IoT.Shared\IoT.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\shared\IoT.Contracts\IoT.Contracts.csproj" />
+    <ProjectReference Include="..\DeviceService.Infrastructure\DeviceService.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

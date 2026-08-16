@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: device-service-config
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  Kafka__BootstrapServers: "your-eventhub.servicebus.windows.net:9093"
+  Kafka__Topics__TelemetryEvents: "telemetry-stored"
+  Kafka__Topics__DeviceEvents: "device-events"
+  Kafka__ConsumerGroups__DeviceProcessor: "device-processor"
+  DeviceService__BaseUrl: "http://device-service/"
