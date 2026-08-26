@@ -18,19 +18,7 @@ public class AcknowledgeAlertCommandHandler : IRequestHandler<AcknowledgeAlertCo
         if (alert is null)
             return Result<bool>.NotFound($"Alert {request.AlertId} not found.");
 
-        var acknowledgement = new AlertAcknowledgement
-        {
-            AlertId = request.AlertId,
-            AcknowledgedById = request.AcknowledgedById,
-            AcknowledgedAt = DateTime.UtcNow,
-            Note = request.Note,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        alert.Acknowledgements.Add(acknowledgement);
-        alert.Status = AlertStatus.Acknowledged;
-        alert.UpdatedAt = DateTime.UtcNow;
+        alert.Acknowledge(request.AcknowledgedById, request.Note);
 
         await _unitOfWork.Alerts.UpdateAsync(alert, ct);
         await _unitOfWork.SaveChangesAsync(ct);

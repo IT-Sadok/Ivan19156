@@ -6,6 +6,7 @@ using IoT.Shared.Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using DeviceService.Interfaces.Services;
 
 namespace DeviceService.Rest.Controllers;
 
@@ -14,8 +15,13 @@ namespace DeviceService.Rest.Controllers;
 public class AlertsController : BaseController
 {
     private readonly IMediator _mediator;
+    private readonly IUserContext _userContext;
 
-    public AlertsController(IMediator mediator) => _mediator = mediator;
+    public AlertsController(IMediator mediator,  IUserContext userContext)
+    {
+        _mediator = mediator;
+        _userContext = userContext;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] Guid? deviceId)
@@ -27,11 +33,7 @@ public class AlertsController : BaseController
     [HttpPost("{id:guid}/acknowledge")]
     public async Task<IActionResult> Acknowledge(Guid id, [FromBody] AcknowledgeAlertRequest request)
     {
-        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdStr, out var userId))
-            return Unauthorized();
-
-        var command = new AcknowledgeAlertCommand(id, userId, request.Note);
+        var command = new AcknowledgeAlertCommand(id, _userContext.UserId, request.Note);
         return HandleResult(await _mediator.SendAsync<AcknowledgeAlertCommand, Result<bool>>(command));
     }
 }

@@ -1,4 +1,5 @@
 using DeviceService.Interfaces.Services;
+using IoT.Shared.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeviceService.Rest.Controllers;
@@ -14,7 +15,7 @@ public class InternalController : BaseController
     [HttpGet("api-keys/validate")]
     public async Task<IActionResult> ValidateApiKey(CancellationToken ct)
     {
-        if (!Request.Headers.TryGetValue("X-Api-Key", out var apiKey))
+        if (!Request.Headers.TryGetValue(ApiConstants.ApiKeyHeader, out var apiKey))
             return Unauthorized();
 
         var deviceId = await _apiKeyService.ValidateAsync(apiKey!, ct);

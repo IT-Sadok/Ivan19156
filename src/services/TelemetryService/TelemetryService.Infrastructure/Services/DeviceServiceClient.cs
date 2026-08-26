@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using IoT.Shared.Infrastructure;
 using TelemetryService.Interfaces.Services;
 
 namespace TelemetryService.Infrastructure.Services;
@@ -13,7 +14,7 @@ public class DeviceServiceClient : IDeviceServiceClient
     public async Task<Guid?> ValidateApiKeyAsync(string apiKey, CancellationToken ct = default)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "api/internal/api-keys/validate");
-        request.Headers.Add("X-Api-Key", apiKey);
+        request.Headers.Add(ApiConstants.ApiKeyHeader, apiKey);
 
         var response = await _httpClient.SendAsync(request, ct);
         if (!response.IsSuccessStatusCode)

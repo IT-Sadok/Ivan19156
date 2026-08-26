@@ -16,4 +16,21 @@ public class Alert : BaseEntity
     public double TriggeredValue { get; set; }
 
     public ICollection<AlertAcknowledgement> Acknowledgements { get; set; } = [];
+    
+    
+    public void Acknowledge(Guid acknowledgedById, string? note)
+    {
+        Acknowledgements.Add(new AlertAcknowledgement
+        {
+            AlertId = Id,
+            AcknowledgedById = acknowledgedById,
+            AcknowledgedAt = DateTime.UtcNow,
+            Note = note,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        });
+        Status = AlertStatus.Acknowledged;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
 }
