@@ -11,8 +11,6 @@ public class TelemetryDbContext : DbContext
         : base(options) { }
 
     public DbSet<TelemetryRecord> TelemetryRecords { get; set; }
-    // TODO: Remove when Gateway handles API key validation
-    public DbSet<DeviceApiKey> DeviceApiKeys { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -34,14 +32,6 @@ public class TelemetryDbContext : DbContext
 
             entity.Property(t => t.ReceivedAt)
                 .HasDefaultValueSql("now()");
-        });
-        
-        builder.Entity<DeviceApiKey>(entity =>
-        {
-            // TODO: Remove when Gateway handles API key validation
-            entity.ToTable("DeviceApiKeys", "public"); 
-            entity.HasKey(k => k.Id);
-            entity.ToTable(tb => tb.ExcludeFromMigrations());
         });
     }
 

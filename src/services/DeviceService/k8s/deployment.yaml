@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: device-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: device-service
+  template:
+    metadata:
+      labels:
+        app: device-service
+    spec:
+      containers:
+        - name: device-service
+          image: iotregistryi.azurecr.io/device-service:#{IMAGE_TAG}#
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: device-service-config
+            - secretRef:
+                name: device-service-secret
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

@@ -6,8 +6,8 @@ using Microsoft.Extensions.Options;
 using TelemetryService.Infrastructure.Consumers;
 using TelemetryService.Infrastructure.Options;
 using TelemetryService.Infrastructure.Persistence;
-using TelemetryService.Infrastructure.Repositories;
 using TelemetryService.Infrastructure.Services;
+using TelemetryService.Infrastructure.Repositories;
 using TelemetryService.Interfaces;
 using TelemetryService.Interfaces.Repositories;
 using TelemetryService.Interfaces.Services;
@@ -29,8 +29,12 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<ITelemetryRepository, TelemetryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddHttpClient<IDeviceServiceClient, DeviceServiceClient>(client =>
+        {
+            client.BaseAddress = new Uri(config["DeviceService:BaseUrl"]
+                ?? throw new InvalidOperationException("DeviceService:BaseUrl is required"));
+        });
         services.AddScoped<IApiKeyService, ApiKeyService>();
-        services.AddScoped<IDeviceApiKeyReadRepository, DeviceApiKeyReadRepository>();
 
         services.AddMassTransit(x =>
         {
