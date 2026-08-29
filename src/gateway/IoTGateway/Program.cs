@@ -7,9 +7,9 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// JWT
+
 var jwtKey = new SymmetricSecurityKey(
-    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!));
+    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -29,7 +29,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// Rate limiting
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("fixed", limiter =>
@@ -41,11 +41,10 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-// YARP
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
-// HttpClient для API key validation
+
 builder.Services.AddHttpClient("DeviceService", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["Services:DeviceService"]!);
@@ -59,7 +58,7 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// API Key middleware для device endpoints
+
 app.UseWhen(
     ctx => ctx.Request.Path.StartsWithSegments("/api/telemetry"),
     appBuilder => appBuilder.UseMiddleware<ApiKeyValidationMiddleware>());

@@ -41,3 +41,4 @@ terraform/terraform.tfvars
 
 #kubernetes
 k8s/secret.yaml
+k8s/local/

@@ -13,8 +13,8 @@ COPY ["src/IoT.Rest/IoT.Rest.csproj", "src/IoT.Rest/"]
 COPY ["src/IoT.Application/IoT.Application.csproj", "src/IoT.Application/"]
 COPY ["src/IoT.Interfaces/IoT.Interfaces.csproj", "src/IoT.Interfaces/"]
 COPY ["src/IoT.Domain/IoT.Domain.csproj", "src/IoT.Domain/"]
-COPY ["src/IoT.Contracts/IoT.Contracts.csproj", "src/IoT.Contracts/"]
-COPY ["src/IoT.Shared/IoT.Shared.csproj", "src/IoT.Shared/"]
+COPY ["shared/IoT.Contracts/IoT.Contracts.csproj", "shared/IoT.Contracts/"]
+COPY ["shared/IoT.Shared/IoT.Shared.csproj", "shared/IoT.Shared/"]
 COPY ["src/IoT.Infrastructure/IoT.Infrastructure.csproj", "src/IoT.Infrastructure/"]
 RUN dotnet restore "src/IoT.Rest/IoT.Rest.csproj"
 COPY . .

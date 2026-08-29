@@ -19,7 +19,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var jwtKey = new SymmetricSecurityKey(
-    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!));
+    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -28,8 +28,8 @@ builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<ICommandHubNotifier, CommandHubNotifier>();
 
 var jwtKey = new SymmetricSecurityKey(
-    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!));
-jwtKey.KeyId = "dev-key";
+    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!));
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
