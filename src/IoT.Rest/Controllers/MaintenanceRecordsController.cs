@@ -1,4 +1,3 @@
-using IoT.Application.Commands.Maintenance.CreateMaintenanceRecord;
 using IoT.Application.Common.Mappings;
 using IoT.Application.Queries.Maintenance.GetMaintenanceRecords;
 using IoT.Contracts.Maintenance;
@@ -17,11 +16,5 @@ public class MaintenanceRecordsController(IMediator mediator) : BaseController
         => HandleResult(await mediator.SendAsync<GetMaintenanceRecordsQuery, Result<IEnumerable<MaintenanceRecordResponse>>>(
             new GetMaintenanceRecordsQuery(deviceId), ct));
 
-    [HttpPost]
-    public async Task<IActionResult> Create(
-        Guid deviceId,
-        [FromBody] CreateMaintenanceRecordRequest request,
-        CancellationToken ct)
-        => HandleResult(await mediator.SendAsync<CreateMaintenanceRecordCommand, Result<MaintenanceRecordResponse>>(
-            request.ToCommand(deviceId), ct));
+  
 }

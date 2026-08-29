@@ -36,7 +36,7 @@ public static class InfrastructureServiceExtensions
         services.AddMassTransit(x =>
 {
     x.AddConsumer<RulesEngineConsumer>();
-    x.AddConsumer<EmbeddingGenerationConsumer>();
+ 
 
     x.UsingInMemory((ctx, cfg) => cfg.ConfigureEndpoints(ctx));
 
@@ -45,10 +45,9 @@ public static class InfrastructureServiceExtensions
         var kafkaOptions = config.GetSection(KafkaOptions.SectionName).Get<KafkaOptions>()!;
 
         rider.AddProducer<TelemetryReceivedEvent>(kafkaOptions.Topics.Telemetry);
-        rider.AddProducer<MaintenanceRecordCreatedEvent>(kafkaOptions.Topics.EmbeddingGeneration);
         
         rider.AddConsumer<RulesEngineConsumer>();
-        rider.AddConsumer<EmbeddingGenerationConsumer>();
+        
 
         rider.UsingKafka((context, k) =>
         {
@@ -91,14 +90,7 @@ public static class InfrastructureServiceExtensions
                     e.ConfigureConsumer<RulesEngineConsumer>(context);
                 });
 
-            k.TopicEndpoint<MaintenanceRecordCreatedEvent>(
-                opts.Topics.EmbeddingGeneration,
-                opts.ConsumerGroups.EmbeddingGenerator,
-                e =>
-                {
-                    e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
-                    e.ConfigureConsumer<EmbeddingGenerationConsumer>(context);
-                });
+           
         });
     });
 });
@@ -140,10 +132,10 @@ public static class InfrastructureServiceExtensions
         x.AddRider(rider =>
         {
             rider.AddProducer<TelemetryReceivedEvent>(kafkaOptions.Topics.Telemetry);
-            rider.AddProducer<MaintenanceRecordCreatedEvent>(kafkaOptions.Topics.EmbeddingGeneration);
+            
             
             rider.AddConsumer<RulesEngineConsumer>();
-            rider.AddConsumer<EmbeddingGenerationConsumer>();
+            
 
             rider.UsingKafka((context, k) =>
             {
@@ -186,15 +178,7 @@ public static class InfrastructureServiceExtensions
                         e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
                         e.ConfigureConsumer<RulesEngineConsumer>(context);
                     });
-
-                k.TopicEndpoint<MaintenanceRecordCreatedEvent>(
-                    opts.Topics.EmbeddingGeneration,
-                    opts.ConsumerGroups.EmbeddingGenerator,
-                    e =>
-                    {
-                        e.CreateIfMissing(t => { t.NumPartitions = 1; t.ReplicationFactor = 1; });
-                        e.ConfigureConsumer<EmbeddingGenerationConsumer>(context);
-                    });
+                
             });
         });
     }

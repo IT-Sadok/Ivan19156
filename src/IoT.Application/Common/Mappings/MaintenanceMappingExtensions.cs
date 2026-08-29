@@ -1,4 +1,3 @@
-using IoT.Application.Commands.Maintenance.CreateMaintenanceRecord;
 using IoT.Contracts.Maintenance;
 using IoT.Domain.Entities;
 
@@ -13,21 +12,5 @@ public static class MaintenanceMappingExtensions
             record.Notes,
             record.PerformedAt,
             record.CreatedAt);
-
-    public static CreateMaintenanceRecordCommand ToCommand(
-        this CreateMaintenanceRecordRequest request,
-        Guid deviceId) =>
-        new(deviceId,
-            request.TechnicianId,
-            request.Notes,
-            request.PerformedAt);
     
-    public static MaintenanceRecord ToEntity(this CreateMaintenanceRecordCommand command) => new()
-    {
-        Id = Guid.NewGuid(),
-        DeviceId = command.DeviceId,
-        TechnicianId = command.TechnicianId,
-        Notes = command.Notes,
-        PerformedAt = command.PerformedAt
-    };
 }

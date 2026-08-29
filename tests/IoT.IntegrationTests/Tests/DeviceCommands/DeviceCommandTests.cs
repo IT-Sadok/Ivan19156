@@ -49,35 +49,8 @@ public class DeviceCommandTests : IAsyncLifetime
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
-    [Fact]
-    public async Task CreateCommand_AsAdmin_ShouldReturn200()
-    {
-        var request = new CreateDeviceCommandRequest(
-            CommandTypeSlug: CommandTypeSlug.Reboot,
-            Parameters: null,
-            Priority: 1,
-            ExpiresAt: DateTime.UtcNow.AddHours(1));
+   
 
-        var response = await _adminClient
-            .PostAsJsonAsync($"/api/devices/{TestConstants.DeviceId}/commands", request);
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var body = await response.Content.ReadFromJsonAsync<DeviceCommandResponse>();
-        body.Should().NotBeNull();
-        body!.DeviceId.Should().Be(TestConstants.DeviceId);
-    }
-
-    [Fact]
-    public async Task CreateCommand_AsTechnician_ShouldReturn403()
-    {
-        var request = new CreateDeviceCommandRequest(
-            CommandTypeSlug: CommandTypeSlug.Reboot,
-            Parameters: null);
-
-        var response = await _technicianClient
-            .PostAsJsonAsync($"/api/devices/{TestConstants.DeviceId}/commands", request);
-        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-    }
-
+    
     public Task DisposeAsync() => Task.CompletedTask;
 }

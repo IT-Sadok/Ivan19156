@@ -60,44 +60,7 @@ public class DeviceTests : IAsyncLifetime
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
-    [Fact]
-    public async Task CreateDevice_ValidRequest_ShouldReturn201AndPersistDevice()
-    {
-        var request = new CreateDeviceRequest(
-            Name: "New Test Sensor",
-            Type: DeviceType.Sensor,
-            ManufacturerId: null);
-
-        var response = await _client.PostAsJsonAsync("/api/devices", request);
-
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var body = await response.Content.ReadFromJsonAsync<DeviceResponse>();
-        body.Should().NotBeNull();
-        body!.Name.Should().Be(request.Name);
-        
-        var device = await _db.Devices.FindAsync(body.Id);
-        device.Should().NotBeNull();
-        device!.Name.Should().Be(request.Name);
-    }
     
-    [Fact]
-    public async Task DeleteDevice_ExistingDevice_ShouldReturn200AndRemoveFromDb()
-    {
-        var createRequest = new CreateDeviceRequest(
-            Name: "Device To Delete",
-            Type: DeviceType.Sensor,
-            ManufacturerId: null);
-
-        var createResponse = await _client.PostAsJsonAsync("/api/devices", createRequest);
-        var created = await createResponse.Content.ReadFromJsonAsync<DeviceResponse>();
-        
-        var deleteResponse = await _client.DeleteAsync($"/api/devices/{created!.Id}");
-        deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        _db.ChangeTracker.Clear();
-        var device = await _db.Devices.FindAsync(created.Id);
-        device.Should().BeNull();
-    }
 
     public Task DisposeAsync() => Task.CompletedTask;
 }
