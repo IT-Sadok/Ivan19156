@@ -21,7 +21,7 @@ public class MaintenanceWebApplicationFactory : WebApplicationFactory<Program>, 
         builder.UseSetting("Kafka:BootstrapServers", _fixture.KafkaBootstrapServers);
         builder.UseSetting("Kafka:Topics:MaintenanceCreated", "maintenance-created");
         builder.UseSetting("Kafka:ConsumerGroups:EmbeddingGenerator", "maintenance-embedding-generator");
-        builder.UseSetting("Jwt:Key", TestConstants.Jwt.Secret);
+        builder.UseSetting("Jwt:Secret", TestConstants.Jwt.Secret);
         builder.UseSetting("Jwt:Issuer", TestConstants.Jwt.Issuer);
         builder.UseSetting("Jwt:Audience", TestConstants.Jwt.Audience);
         builder.UseSetting("AzureAI:Endpoint", "https://mock.openai.azure.com/");
@@ -32,7 +32,7 @@ public class MaintenanceWebApplicationFactory : WebApplicationFactory<Program>, 
         {
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                ["Jwt:Key"] = TestConstants.Jwt.Secret,
+                ["Jwt:Secret"] = TestConstants.Jwt.Secret,
                 ["Jwt:Issuer"] = TestConstants.Jwt.Issuer,
                 ["Jwt:Audience"] = TestConstants.Jwt.Audience,
             });
