@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iot-gateway
+  template:
+    metadata:
+      labels:
+        app: iot-gateway
+    spec:
+      containers:
+        - name: iot-gateway
+          image: iotregistryi.azurecr.io/iot-gateway:#{IMAGE_TAG}#
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: iot-gateway-config
+            - secretRef:
+                name: iot-gateway-secret
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maintenance-service-config
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  Kafka__BootstrapServers: "your-eventhub.servicebus.windows.net:9093"
+  Kafka__Topics__MaintenanceCreated: "maintenance-created"
+  Kafka__ConsumerGroups__EmbeddingGenerator: "maintenance-embedding-generator"
+  AzureAI__EmbeddingDeploymentName: "text-embedding-ada-002"

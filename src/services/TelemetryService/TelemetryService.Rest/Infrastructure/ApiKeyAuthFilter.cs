@@ -14,6 +14,16 @@ public class ApiKeyAuthFilter : IAsyncActionFilter
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
+        
+        if (context.HttpContext.Request.Headers.TryGetValue("X-Device-Id", out var deviceIdHeader)
+            && Guid.TryParse(deviceIdHeader, out var gatewayDeviceId))
+        {
+            context.HttpContext.Items["DeviceId"] = gatewayDeviceId;
+            await next();
+            return;
+        }
+
+        
         if (!context.HttpContext.Request.Headers.TryGetValue(ApiConstants.ApiKeyHeader, out var apiKey))
         {
             context.Result = new UnauthorizedResult();

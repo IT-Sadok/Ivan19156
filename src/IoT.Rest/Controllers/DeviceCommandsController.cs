@@ -1,4 +1,3 @@
-using IoT.Application.Commands.DeviceCommands.CreateDeviceCommand;
 using IoT.Application.Common.Mappings;
 using IoT.Application.Queries.DeviceCommands.GetDeviceCommands;
 using IoT.Contracts.DeviceCommands;
@@ -24,11 +23,5 @@ public class DeviceCommandsController : BaseController
         => HandleResult(await _mediator.SendAsync<GetDeviceCommandsQuery, Result<IEnumerable<DeviceCommandResponse>>>(
             new GetDeviceCommandsQuery(deviceId)));
 
-    [Authorize(Roles = Roles.Admin)]
-    [HttpPost]
-    public async Task<IActionResult> Create(
-        Guid deviceId,
-        [FromBody] CreateDeviceCommandRequest request)
-        => HandleResult(await _mediator.SendAsync<CreateDeviceCommandCommand, Result<DeviceCommandResponse>>(
-            request.ToCommand() with { DeviceId = deviceId }));
+    
 }

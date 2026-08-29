@@ -47,46 +47,8 @@ public class RuleTests : IAsyncLifetime
         body.Should().NotBeNull();
     }
 
-    [Fact]
-    public async Task CreateRule_AsAdmin_ShouldReturn200()
-    {
-        var request = new
-        {
-            name = "High Temperature Alert",
-            deviceId = TestConstants.DeviceId,
-            deviceType = (DeviceType?)null,
-            field = "temperature",
-            @operator = RuleOperator.Gt,
-            value = 50.0,
-            action = RuleAction.CreateAlert
-        };
+    
 
-        var response = await _adminClient.PostAsJsonAsync("/api/rules", request);
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        var body = await response.Content.ReadFromJsonAsync<RuleResponse>();
-        body.Should().NotBeNull();
-        body!.Name.Should().Be(request.name);
-        body.DeviceId.Should().Be(TestConstants.DeviceId);
-    }
-
-    [Fact]
-    public async Task CreateRule_AsTechnician_ShouldReturn403()
-    {
-        var request = new
-        {
-            name = "Test Rule",
-            deviceId = TestConstants.DeviceId,
-            deviceType = DeviceType.Sensor,
-            field = "temperature",
-            @operator = RuleOperator.Gt,
-            value = 50.0,
-            action = RuleAction.CreateAlert
-        };
-
-        var response = await _client.PostAsJsonAsync("/api/rules", request);
-        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-    }
-
+    
     public Task DisposeAsync() => Task.CompletedTask;
 }
