@@ -50,7 +50,7 @@ jobs:
           push: true
           tags: ${{ secrets.ACR_LOGIN_SERVER }}/maintenance-service:${{ github.sha }}
 
-    build-and-push-gateway:
+  build-and-push-gateway:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
