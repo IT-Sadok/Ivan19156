@@ -23,7 +23,7 @@ public class DeviceWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         builder.UseSetting("Kafka:Topics:TelemetryEvents", "telemetry-stored");
         builder.UseSetting("Kafka:Topics:DeviceEvents", "device-events");
         builder.UseSetting("Kafka:ConsumerGroups:DeviceProcessor", "device-processor");
-        builder.UseSetting("Jwt:Key", TestConstants.Jwt.Secret);
+        builder.UseSetting("Jwt:Secret", TestConstants.Jwt.Secret);
         builder.UseSetting("Jwt:Issuer", TestConstants.Jwt.Issuer);
         builder.UseSetting("Jwt:Audience", TestConstants.Jwt.Audience);
         builder.UseSetting("DeviceService:BaseUrl", "http://localhost/");
@@ -32,7 +32,7 @@ public class DeviceWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         {
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                ["Jwt:Key"] = TestConstants.Jwt.Secret,
+                ["Jwt:Secret"] = TestConstants.Jwt.Secret,
                 ["Jwt:Issuer"] = TestConstants.Jwt.Issuer,
                 ["Jwt:Audience"] = TestConstants.Jwt.Audience,
             });
