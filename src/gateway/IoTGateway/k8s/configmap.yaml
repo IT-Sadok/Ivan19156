@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iot-gateway-config
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  Jwt__Issuer: "IoT.Api"
+  Jwt__Audience: "IoT.Client"
+  Services__DeviceService: "http://device-service"
+  ReverseProxy__Clusters__monolith-cluster__Destinations__monolith__Address: "http://iot-api"
+  ReverseProxy__Clusters__telemetry-cluster__Destinations__telemetry__Address: "http://telemetry-service"
+  ReverseProxy__Clusters__device-cluster__Destinations__device__Address: "http://device-service"
+  ReverseProxy__Clusters__maintenance-cluster__Destinations__maintenance__Address: "http://maintenance-service"
